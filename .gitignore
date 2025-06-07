@@ -1,11 +1,24 @@
 # C++ / VS code
-build/
 *.exe
 *.obj
 *.o
 *.pch
 *.ilk
 *.pdb
+*.out
+*.so
 
-# VS Code settings
+# build directories
+bin/
+obj/
+build/
+
+# Dependency directories
+deps/
+
+# IDE files
 .vscode/
+*.code-workspace
+
+# System files
+.DS_Store

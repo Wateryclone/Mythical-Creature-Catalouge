@@ -1,0 +1,11 @@
+# C++ / VS code
+build/
+*.exe
+*.obj
+*.o
+*.pch
+*.ilk
+*.pdb
+
+# VS Code settings
+.vscode/

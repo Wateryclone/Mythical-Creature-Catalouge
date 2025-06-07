@@ -10,19 +10,20 @@
 
 using namespace std;
 
-void printWelcome();
-void buildCreatureList();
-void runMainMenu();
+void printWelcome(string &);
+void buildCreatureList(HashTable<Creature> &, BinaryTree<Creature> &, string<Creature> &);
+void runMainMenu(HashTable<Creature> &, BinaryTree<Creaute> &);
 void printGoodbye();
 
 int main() {
     
     string filename;
     BinaryTree<Creature> Ctree;
+    HashTable<Creature> Ctable;
 
     printWelcome();
-    buildCreatureList();
-    runMainMenu();
+    buildCreatureList(Ctable, Ctree, filename);
+    runMainMenu(Ctable, Ctree);
     printGoodbye();
     // cout << "Enter the name of the file containing the creature data: ";
     // getline(cin, filename);

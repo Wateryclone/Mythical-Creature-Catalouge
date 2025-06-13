@@ -9,81 +9,81 @@
 
 #include "BinaryTree.h"
 
-template <class ItemType>
-class BinarySearchTree : public BinaryTree<ItemType>
+template <class KeyType>
+class BinarySearchTree : public BinaryTree<KeyType>
 {
 public:
     // insert a node at the correct location
-    bool insert(const ItemType &item);
+    bool insert(const KeyType &key);
     // remove a node if found
-    // bool remove(const ItemType &item);
+    // bool remove(const KeyType &item);
     // find a target node
-    bool search(const ItemType &target, ItemType &returnedItem) const;
+    bool search(const KeyType &target, KeyType &returnedItem) const;
     // find the smallest node
-    bool findSmallest(ItemType &returnedItem) const;
+    bool findSmallest(KeyType &returnedItem) const;
     // find the largest node
-    bool findLargest(ItemType &returnedItem) const;
+    bool findLargest(KeyType &returnedItem) const;
     // remove a node if found
-    bool remove(const ItemType &item);
+    bool remove(const KeyType &key);
 
 private:
     // internal insert node: insert newNode in nodePtr subtree
-    BinaryNode<ItemType> *_insert(BinaryNode<ItemType> *nodePtr, BinaryNode<ItemType> *newNode);
+    BinaryNode<KeyType> *_insert(BinaryNode<KeyType> *nodePtr, BinaryNode<KeyType> *newNode);
 
     // search for target node
-    BinaryNode<ItemType> *_search(BinaryNode<ItemType> *treePtr, const ItemType &target) const;
+    BinaryNode<KeyType> *_search(BinaryNode<KeyType> *treePtr, const KeyType &target) const;
 
     // find the smallest node
-    BinaryNode<ItemType> *_findSmallest(BinaryNode<ItemType> *nodePtr) const;
+    BinaryNode<KeyType> *_findSmallest(BinaryNode<KeyType> *nodePtr) const;
 
     // find the largest node
-    BinaryNode<ItemType> *_findLargest(BinaryNode<ItemType> *nodePtr) const;
+    BinaryNode<KeyType> *_findLargest(BinaryNode<KeyType> *nodePtr) const;
 
     // internal remove node: locate and delete target node under nodePtr subtree
-    BinaryNode<ItemType> *_remove(BinaryNode<ItemType> *nodePtr, const ItemType target, bool &success);
+    BinaryNode<KeyType> *_remove(BinaryNode<KeyType> *nodePtr, const KeyType target, bool &success);
 
     // delete target node from tree, called by internal remove node
-    BinaryNode<ItemType> *_removeNode(BinaryNode<ItemType> *targetNodePtr);
+    BinaryNode<KeyType> *_removeNode(BinaryNode<KeyType> *targetNodePtr);
 
     // remove the leftmost node in the left subtree of nodePtr
-    BinaryNode<ItemType> *_removeLeftmostNode(BinaryNode<ItemType> *nodePtr, ItemType &successor);
+    BinaryNode<KeyType> *_removeLeftmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successor);
 
     // remove the rightmost node in the right subtree of nodePtr
-    BinaryNode<ItemType> *_removeRightmostNode(BinaryNode<ItemType> *nodePtr, ItemType &successor);
+    BinaryNode<KeyType> *_removeRightmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successor);
 };
 
 ///////////////////////// public function definitions ///////////////////////////
 // Wrapper for _findSmallest - Finding the smallest node in the tree
-template <class ItemType>
-bool BinarySearchTree<ItemType>::findSmallest(ItemType &returnedItem) const
+template <class KeyType>
+bool BinarySearchTree<KeyType>::findSmallest(KeyType &returnedItem) const
 {
-    BinaryNode<ItemType> *smallestNode = _findSmallest(this->rootPtr);
+    BinaryNode<KeyType> *smallestNode = _findSmallest(this->rootPtr);
     if (smallestNode)
     {
-        returnedItem = smallestNode->getItem();
+        returnedItem = smallestNode->getKey();
         return true;
     }
     return false;
 }
 
 // Wrapper for _findLargest - Finding the largest node in the tree
-template <class ItemType>
-bool BinarySearchTree<ItemType>::findLargest(ItemType &returnedItem) const
+template <class KeyType>
+bool BinarySearchTree<KeyType>::findLargest(KeyType &returnedItem) const
 {
-    BinaryNode<ItemType> *largestNode = _findLargest(this->rootPtr);
+    BinaryNode<KeyType> *largestNode = _findLargest(this->rootPtr);
     if (largestNode)
     {
-        returnedItem = largestNode->getItem();
+        returnedItem = largestNode->getKey();
         return true;
     }
     return false;
 }
 
-template <class ItemType>
-inline bool BinarySearchTree<ItemType>::remove(const ItemType &item)
+template <class KeyType>
+inline bool BinarySearchTree<KeyType>::remove(const KeyType &key)
 {
     bool success = false;
-    this->rootPtr = _remove(this->rootPtr, item, success);
+    this->rootPtr = _remove(this->rootPtr, key, success);
     if (success)
     {
         this->count--;
@@ -92,10 +92,10 @@ inline bool BinarySearchTree<ItemType>::remove(const ItemType &item)
 }
 
 // Wrapper for _insert - Inserting items within a tree
-template <class ItemType>
-bool BinarySearchTree<ItemType>::insert(const ItemType &newEntry)
+template <class KeyType>
+bool BinarySearchTree<KeyType>::insert(const KeyType &newEntry)
 {
-    BinaryNode<ItemType> *newNodePtr = new BinaryNode<ItemType>(newEntry);
+    BinaryNode<KeyType> *newNodePtr = new BinaryNode<KeyType>(newEntry);
     this->rootPtr = _insert(this->rootPtr, newNodePtr);
     this->count++;
     return true;
@@ -105,14 +105,14 @@ bool BinarySearchTree<ItemType>::insert(const ItemType &newEntry)
 //  - it calls the private _search function that returns a Node pointer or NULL
 //  - if found, it copies data from that node and sends it back to the caller
 //    via the output parameter, and returns true, otherwise it returns false.
-template <class ItemType>
-bool BinarySearchTree<ItemType>::search(const ItemType &anEntry, ItemType &returnedItem) const
+template <class KeyType>
+bool BinarySearchTree<KeyType>::search(const KeyType &anEntry, KeyType &returnedItem) const
 {
-    BinaryNode<ItemType> *temp = nullptr;
+    BinaryNode<KeyType> *temp = nullptr;
     temp = _search(this->rootPtr, anEntry);
     if (temp)
     {
-        returnedItem = temp->getItem();
+        returnedItem = temp->getKey();
         return true;
     }
     return false;
@@ -121,9 +121,9 @@ bool BinarySearchTree<ItemType>::search(const ItemType &anEntry, ItemType &retur
 //////////////////////////// private functions ////////////////////////////////////////////
 
 // Rewrite the private insert as a recursive function.
-template <class ItemType>
-BinaryNode<ItemType> *BinarySearchTree<ItemType>::_insert(BinaryNode<ItemType> *nodePtr,
-                                                          BinaryNode<ItemType> *newNodePtr)
+template <class KeyType>
+BinaryNode<KeyType> *BinarySearchTree<KeyType>::_insert(BinaryNode<KeyType> *nodePtr,
+                                                          BinaryNode<KeyType> *newNodePtr)
 {
     if (!nodePtr) // == nullptr
     {
@@ -131,7 +131,7 @@ BinaryNode<ItemType> *BinarySearchTree<ItemType>::_insert(BinaryNode<ItemType> *
     }
     else
     {
-        if (newNodePtr->getItem() < nodePtr->getItem())
+        if (newNodePtr->getKey() < nodePtr->getKey())
         {
             nodePtr->setLeftPtr(_insert(nodePtr->getLeftPtr(), newNodePtr));
         }
@@ -146,24 +146,24 @@ BinaryNode<ItemType> *BinarySearchTree<ItemType>::_insert(BinaryNode<ItemType> *
 // Implement the private search function as a recursive function
 // - return nullptr if target not found, otherwise
 // - returns a pointer to the node that matched the target
-template <class ItemType>
-BinaryNode<ItemType> *BinarySearchTree<ItemType>::_search(BinaryNode<ItemType> *nodePtr,
-                                                          const ItemType &target) const
+template <class KeyType>
+BinaryNode<KeyType> *BinarySearchTree<KeyType>::_search(BinaryNode<KeyType> *nodePtr,
+                                                          const KeyType &target) const
 {
-    BinaryNode<ItemType> *found = nullptr;
+    BinaryNode<KeyType> *found = nullptr;
     if (nodePtr == nullptr)
     {
         return nullptr;
     }
 
-    if (nodePtr->getItem() == target)
+    if (nodePtr->getKey() == target)
     {
         return nodePtr;
     }
     else
     {
-        ItemType item = nodePtr->getItem();
-        if (item > target)
+        KeyType key = nodePtr->getKey();
+        if (key > target)
         {
             found = _search(nodePtr->getLeftPtr(), target);
         }
@@ -176,8 +176,8 @@ BinaryNode<ItemType> *BinarySearchTree<ItemType>::_search(BinaryNode<ItemType> *
 }
 
 // Find the smallest node in the tree
-template <class ItemType>
-BinaryNode<ItemType> *BinarySearchTree<ItemType>::_findSmallest(BinaryNode<ItemType> *nodePtr) const
+template <class KeyType>
+BinaryNode<KeyType> *BinarySearchTree<KeyType>::_findSmallest(BinaryNode<KeyType> *nodePtr) const
 {
     if (nodePtr == nullptr || nodePtr->getLeftPtr() == nullptr)
     {
@@ -187,8 +187,8 @@ BinaryNode<ItemType> *BinarySearchTree<ItemType>::_findSmallest(BinaryNode<ItemT
 }
 
 // Find the largest node in the tree
-template <class ItemType>
-BinaryNode<ItemType> *BinarySearchTree<ItemType>::_findLargest(BinaryNode<ItemType> *nodePtr) const
+template <class KeyType>
+BinaryNode<KeyType> *BinarySearchTree<KeyType>::_findLargest(BinaryNode<KeyType> *nodePtr) const
 {
     if (nodePtr == nullptr || nodePtr->getRightPtr() == nullptr)
     {
@@ -198,19 +198,19 @@ BinaryNode<ItemType> *BinarySearchTree<ItemType>::_findLargest(BinaryNode<ItemTy
 }
 
 // Remove a node from the tree
-template <class ItemType>
-BinaryNode<ItemType> *BinarySearchTree<ItemType>::_remove(BinaryNode<ItemType> *nodePtr, const ItemType target, bool &success)
+template <class KeyType>
+BinaryNode<KeyType> *BinarySearchTree<KeyType>::_remove(BinaryNode<KeyType> *nodePtr, const KeyType target, bool &success)
 {
     // If the nodePtr is null, the target is not found
     if (nodePtr == nullptr) {
         return nullptr;
     }
     // If the target is less than the current node's item, search in the left subtree
-    if (target < nodePtr->getItem()) {
+    if (target < nodePtr->getKey()) {
         nodePtr->setLeftPtr(_remove(nodePtr->getLeftPtr(), target, success));
     }
     // If the target is greater than the current node's item, search in the right subtree
-    else if (target > nodePtr->getItem()) {
+    else if (target > nodePtr->getKey()) {
         nodePtr->setRightPtr(_remove(nodePtr->getRightPtr(), target, success));
     }
     // If the target is equal to the current node's item, we found the node to remove
@@ -226,8 +226,8 @@ BinaryNode<ItemType> *BinarySearchTree<ItemType>::_remove(BinaryNode<ItemType> *
 
 // Remove a node from the tree
 // This function is called by _remove to actually delete the target node
-template <class ItemType>
-inline BinaryNode<ItemType> *BinarySearchTree<ItemType>::_removeNode(BinaryNode<ItemType> *targetNodePtr)
+template <class KeyType>
+inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeNode(BinaryNode<KeyType> *targetNodePtr)
 {
     // If the target node is a leaf node, delete it and return nullptr
     if (targetNodePtr->isLeaf()) {
@@ -238,22 +238,22 @@ inline BinaryNode<ItemType> *BinarySearchTree<ItemType>::_removeNode(BinaryNode<
     if (targetNodePtr->getLeftPtr() != nullptr &&
         targetNodePtr->getRightPtr() == nullptr)
     {
-        BinaryNode<ItemType>* leftChild = targetNodePtr->getLeftPtr();
+        BinaryNode<KeyType>* leftChild = targetNodePtr->getLeftPtr();
         delete targetNodePtr;
         return leftChild;
     }
     if (targetNodePtr->getLeftPtr() == nullptr &&
         targetNodePtr->getRightPtr() != nullptr)
     {
-        BinaryNode<ItemType>* rightChild = targetNodePtr->getRightPtr();
+        BinaryNode<KeyType>* rightChild = targetNodePtr->getRightPtr();
         delete targetNodePtr;
         return rightChild;
     }
     // If the target node has two children, find the in-order successor
     // the smallest node in the right subtree, replace the target node's item with it,
     // and then remove the in-order successor from the right subtree
-    ItemType successorValue;
-    BinaryNode<ItemType>* newRightSubtree = _removeLeftmostNode(targetNodePtr->getRightPtr(), successorValue);
+    KeyType successorValue;
+    BinaryNode<KeyType>* newRightSubtree = _removeLeftmostNode(targetNodePtr->getRightPtr(), successorValue);
     targetNodePtr->setItem(successorValue);
     targetNodePtr->setRightPtr(newRightSubtree);
     // Return the target node pointer, which now has its item replaced
@@ -264,15 +264,15 @@ inline BinaryNode<ItemType> *BinarySearchTree<ItemType>::_removeNode(BinaryNode<
 // This function is used to find the in-order successor when removing a node with two children
 // It returns the new subtree with the leftmost node removed and sets the successor value
 // to the item of the removed node.
-template <class ItemType>
-inline BinaryNode<ItemType> *BinarySearchTree<ItemType>::_removeLeftmostNode(BinaryNode<ItemType> *nodePtr, ItemType &successor)
+template <class KeyType>
+inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeLeftmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successor)
 {
     // If the left child is null, we found the leftmost node
     if (nodePtr->getLeftPtr() == nullptr) {
         // Store the item of the leftmost node in successor
-        successor = nodePtr->getItem();
+        successor = nodePtr->getKey();
         // If the leftmost node has a right child, return it
-        BinaryNode<ItemType>* rightChild = nodePtr->getRightPtr();
+        BinaryNode<KeyType>* rightChild = nodePtr->getRightPtr();
         delete nodePtr;
         return rightChild;
     }
@@ -288,15 +288,15 @@ inline BinaryNode<ItemType> *BinarySearchTree<ItemType>::_removeLeftmostNode(Bin
 // This function is used to find the in-order predecessor when removing a node with two children
 // It returns the new subtree with the rightmost node removed and sets the successor value
 // to the item of the removed node.
-template <class ItemType>
-inline BinaryNode<ItemType> *BinarySearchTree<ItemType>::_removeRightmostNode(BinaryNode<ItemType> *nodePtr, ItemType &successor)
+template <class KeyType>
+inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeRightmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successor)
 {
     // If the right child is null, we found the rightmost node
     if (nodePtr->getRightPtr() == nullptr) {
         // Store the item of the rightmost node in successor
-        successor = nodePtr->getItem();
+        successor = nodePtr->getKey();
         // If the rightmost node has a left child, return it
-        BinaryNode<ItemType>* leftChild = nodePtr->getLeftPtr();
+        BinaryNode<KeyType>* leftChild = nodePtr->getLeftPtr();
         delete nodePtr;
         return leftChild;
     }

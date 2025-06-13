@@ -12,7 +12,7 @@ using namespace std;
 
 void printWelcome(string &);
 void buildCreatureList(HashTable<Creature> &, BinaryTree<Creature> &, string<Creature> &);
-void runMainMenu(HashTable<Creature> &, BinaryTree<Creaute> &);
+void runMainMenu(HashTable<Creature> &, BinaryTree<creature> &);
 void printGoodbye();
 
 int main() {

@@ -24,7 +24,16 @@ class Creature
         // Constructors
         Creature();
         Creature(string id, string n, string cat, string hist,
-                 string hab, string desc, int y);
+                 string hab, string desc, int y)
+                 {
+                    creatureID = id;
+                    name = n;
+                    category = cat;
+                    history = hist;
+                    habitat = hab;
+                    description = desc;
+                    releventYear = y;
+                 }
         // Setters
         void setCreatureID(const string& id) { creatureID = id; }
         void setName(const string& n) { name = n; }

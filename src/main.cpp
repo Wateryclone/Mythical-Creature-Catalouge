@@ -5,7 +5,8 @@
 #include <string>
 #include <cctype>
 
-// #include "BinaryTree.h"
+#include "BinarySearchTree.h"
+#include "HashTable.h"
 #include "Creature.h"
 #include "ScreenManager.h"
 
@@ -21,8 +22,8 @@ int main()
 
     string filename = "Creatures.txt";
     string cmd;
-    // BinaryTree<Creature> Ctree;
-    // HashTable<Creature> Ctable;
+    BinarySearchTree<string> bst;
+    HashTable hashTable;
 
     printWelcome();
     cout << "User command: ";
@@ -48,12 +49,16 @@ int main()
             if ( filename == "Y" or filename == "y")
                 filename = "Creatures.txt";
             
-            int loadSuc = buildDataStructure(filename);
+            int loadSuc = buildDataStructure(filename, bst, hashTable);
 
             if ( loadSuc == -1)
             {
                 cout << "Reenter your data file..." << endl;
                 cmd = "L";
+            }
+            else
+            {
+                cout << "File " << filename << " was successfully loaded!" << endl;
             }
         }
         else if (cmd == "Q")
@@ -61,13 +66,10 @@ int main()
             cout << "Thank you for visiting!" << endl;
             return 0;
         }
+
+
+        cout << "User command: ";
+        getline(cin, cmd);
     }
-
-    // buildCreatureList(Ctable, Ctree, filename);
-    // runMainMenu(Ctable, Ctree);
-    // printGoodbye();
-    // cout << "Enter the name of the file containing the creature data: ";
-    // getline(cin, filename);
-
 }
 

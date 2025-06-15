@@ -8,6 +8,10 @@
 using namespace std;
 
 #include "Creature.h"
+#include "BinarySearchTree.h"
+#include "HashTable.h"
+
+void iDisplay(const string &item, int level);
 
 void printWelcome()
 {
@@ -27,7 +31,7 @@ void printWelcome()
 }
 
 // void buildDataStructure(const string &filename, BinarySearchTree<Creature> &bst, HashMap<Creature> &hashMap)
-int buildDataStructure( const string &filename )
+int buildDataStructure( const string &filename, BinarySearchTree<string> &bst, HashTable &hashTable )
 {
     ifstream fin(filename);
     cout << "Reading data from \"" << filename << "...\"" << endl;
@@ -52,34 +56,44 @@ int buildDataStructure( const string &filename )
         
         stringstream temp(line);   // create temp with data from line
 
-        temp.ignore();              // to ignore space
         getline(temp, creatureID, ';');        // read from temp
-
-        temp.ignore();             // to ignore space
         getline(temp, name, ';');  // stop reading at ';'
-
-        temp.ignore();             // to ignore space
         getline(temp, category, ';');  // stop reading at ';'
-
-        temp.ignore();             // to ignore space
         getline(temp, history, ';');  // stop reading at ';'
-
-        temp.ignore();             // to ignore space
         getline(temp, habitat, ';');  // stop reading at ';'
-
-        temp.ignore();             // to ignore space
-        getline(temp, description , ';');  // stop reading at ';'
-        
-        temp.ignore();             // to ignore space
+        getline(temp, description , ';');  // stop reading at ';'    
         temp >> releventYear;  // stop reading at ';'
 
         // create a Creature object and initialize it with data from file
         Creature aCreature(creatureID, name, category, history, habitat, description, releventYear);
 
-        cout << endl;
-        // bst.insert(aCreature); // TODO to implemnet
-        // hashMap.insert(aCreature); // TODO to implemnet
+        aCreature.vPrintCreature();
+        
+        int ind = hashTable.insert(aCreature); // TODO to implemnet
+        bool resInsert = bst.insert(ind, aCreature.getCreatureID()); // TODO to implemnet
+
+        // For debugging
+        if ( ind > -1 && resInsert ) 
+            cout << aCreature.getCreatureID() << " is inserted successfully." << endl;
+        else
+            cout << aCreature.getCreatureID() << " is NOT inserted." << endl;
+        
     }
+
+    // For debugging
+    cout << "====== Built HashTable =====" << endl;
+    hashTable.printTable();    
+    cout << "====== Built BST =====" << endl;
+    bst.printTree(iDisplay);
+
     return 1;
 
+}
+
+void iDisplay(const string &item, int level)
+{
+    for (int i = 1; i < level; i++)
+        cout << "..";
+    cout << level << "). " << item << endl;
+    
 }

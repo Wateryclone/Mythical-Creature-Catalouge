@@ -14,7 +14,7 @@ class BinarySearchTree : public BinaryTree<KeyType>
 {
 public:
     // insert a node at the correct location
-    bool insert(const KeyType &key);
+    bool insert(const int &ind, const KeyType &key);
     // remove a node if found
     // bool remove(const KeyType &item);
     // find a target node
@@ -93,9 +93,9 @@ inline bool BinarySearchTree<KeyType>::remove(const KeyType &key)
 
 // Wrapper for _insert - Inserting items within a tree
 template <class KeyType>
-bool BinarySearchTree<KeyType>::insert(const KeyType &newEntry)
+bool BinarySearchTree<KeyType>::insert(const int &ind, const KeyType &newEntry)
 {
-    BinaryNode<KeyType> *newNodePtr = new BinaryNode<KeyType>(newEntry);
+    BinaryNode<KeyType> *newNodePtr = new BinaryNode<KeyType>(ind, newEntry);
     this->rootPtr = _insert(this->rootPtr, newNodePtr);
     this->count++;
     return true;

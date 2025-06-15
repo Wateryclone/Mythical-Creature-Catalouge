@@ -16,9 +16,9 @@ private:
 
 public:
     // constructors
-    BinaryNode(const int &index, KeyType &anItem)
+    BinaryNode(const int &ind, const KeyType &anItem)
     {
-        index = index;
+        index = ind;
         key = anItem;
         leftPtr = nullptr;
         rightPtr = nullptr;

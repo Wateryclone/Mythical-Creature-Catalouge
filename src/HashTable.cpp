@@ -26,7 +26,8 @@ int HashTable::hashFunction(const string& key) const {
 
 // Insert implementation
 int HashTable::insert(const Creature& creature) {
-    if (loadFactor() > 0.75) {
+    float lf = loadFactor();
+    if (lf > 0.75) {
         rehash();
     }
 

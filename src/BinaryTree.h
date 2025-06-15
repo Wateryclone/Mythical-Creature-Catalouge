@@ -44,7 +44,7 @@ public:
     void printLeaf(void visit(const KeyType &)) const { _printLeaf(visit, rootPtr); }
 
     // abstract functions to be implemented by derived class
-    virtual bool insert(const KeyType &newData) = 0;
+    virtual bool insert(const int &ind, const KeyType &newData) = 0;
     // virtual bool remove(const KeyType &data) = 0;
     virtual bool search(const KeyType &target, KeyType &returnedItem) const = 0;
 
@@ -120,8 +120,8 @@ void BinaryTree<KeyType>::_printTree(void visit(const KeyType &, int), BinaryNod
     {
         KeyType key = nodePtr->getKey();
         visit(key, level);
-        _printTree(visit, nodePtr->getRightPtr(), level + 1);
         _printTree(visit, nodePtr->getLeftPtr(), level + 1);
+        _printTree(visit, nodePtr->getRightPtr(), level + 1);
     }
 }
 

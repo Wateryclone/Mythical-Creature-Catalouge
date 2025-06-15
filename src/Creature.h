@@ -5,8 +5,10 @@ Specification for Creature class
 #define CREATURE_H
 
 #include <string>
+#include <iostream>
+#include <sstream>
 
-using std::string;
+using namespace std;
 
 class Creature 
 {
@@ -53,9 +55,22 @@ class Creature
         int getReleventYear() const { return releventYear; }
 
         // Other methods
-        //.......tbd
+        // print a creature
+        void vPrintCreature();
 
 };
+
+// vertical print a creature
+inline void Creature::vPrintCreature()
+{
+    cout << "Creature ID: " << creatureID << endl;
+    cout << "Name: " << name << endl;
+    cout << "Category: " << category << endl;
+    cout << "History: " << history << endl;
+    cout << "Habitat: " << habitat << endl;
+    cout << "Description: " << description << endl;
+    cout << "Year: " << releventYear << endl;
+}
 
 #endif
 

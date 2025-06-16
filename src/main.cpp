@@ -62,22 +62,38 @@ int main()
             searchManager(hashTable);
 
         }
-        else if (cmd =="P")
+        else if (cmd == "A")
+        {
+            cout << "===== Adding a new creature =====" << endl;
+            insertManager(bst, hashTable);
+
+        }
+        else if (cmd == "P")
         {
             cout << "===== All stored data in order =====" << endl;
             bst.inOrder(hDisplay);
+            cout << endl;
 
             // For debugging: hidden indented tree
-            cout << "\n===== BST indented tree ===== " << endl;
-            bst.printTree(iDisplay);
+            // cout << "\n===== BST indented tree ===== " << endl;
+            // bst.printTree(iDisplay);
+        }
+        else if (cmd == "T")
+        {
+            statisticsManager(hashTable);
         }
         else if (cmd == "Q")
         {
             cout << "Thank you for visiting!" << endl;
             return 0;
         }
+        else
+        {
+            cout << "Invalid command " << cmd << endl;
+            printWelcome();
+        }
 
-        cout << "User command: ";
+        cout << "\nUser command: ";
         getline(cin, cmd);
     }
 }

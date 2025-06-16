@@ -14,6 +14,8 @@ using namespace std;
 void printWelcome();
 int buildDataStructure( const string &filename, BinarySearchTree<string> &bst, HashTable &hashTable );
 void searchManager(const HashTable &hashTable);
+void insertManager(BinarySearchTree<string> &bst, HashTable &hashTable);
+void statisticsManager(const HashTable &hashTable);
 void iDisplay(const string &item, int level);
 void hDisplay(const string &item);
 
@@ -74,8 +76,8 @@ int buildDataStructure( const string &filename, BinarySearchTree<string> &bst, H
         // For debugging
         // aCreature.vPrintCreature();
         
-        int ind = hashTable.insert(aCreature); // TODO to implemnet
-        bool resInsert = bst.insert(ind, aCreature.getCreatureID()); // TODO to implemnet
+        int ind = hashTable.insert(aCreature);
+        bool resInsert = bst.insert(ind, aCreature.getCreatureID());
 
         // For debugging
         // if ( ind > -1 && resInsert ) 
@@ -111,6 +113,56 @@ void searchManager(const HashTable &hashTable)
     {
         cout << "Creature \"" << targetID << "\" - not found" << endl;
     }
+}
+
+void insertManager(BinarySearchTree<string> &bst, HashTable &hashTable)
+{
+    string creatureID; // Primary key eg. "FNKS-BD"
+    string name; // eg. "Phoenix"
+    string category; // eg. "Bird"
+    string history; // famous legend or myth associated with the creature 
+            //eg."A mythical bird that cyclically regenerates or is reborn from its ashes, known in Greek, Egyptian, and Persian traditions."
+    string habitat; // eg. "Deserts and mountains"
+    string description; // eg. "Fiery bird with radiant plumage, capable of resurrection through immolation and rebirth."
+    int releventYear; // year of first mention in history
+    
+    cout << "Please enter a creature ID: ";
+    getline(cin, creatureID);
+
+    cout << "Please enter a creature name: ";
+    getline(cin, name);
+
+    cout << "Please enter a creature category: ";
+    getline(cin, category);
+
+    cout << "Please enter a creature history: ";
+    getline(cin, history);
+
+    cout << "Please enter a creature habitat: ";
+    getline(cin, habitat);
+
+    cout << "Please enter a creature description: ";
+    getline(cin, description);
+
+    cout << "Please enter a creature year: ";
+    string year;
+    getline(cin, year);
+    releventYear = stoi(year);
+
+    Creature newCreature(creatureID, name, category, history, habitat, description, releventYear);
+
+    int ind = hashTable.insert(newCreature);
+    bool resInsert = bst.insert(ind, newCreature.getCreatureID());
+
+}
+
+void statisticsManager(const HashTable &hashTable)
+{
+    cout << "===== Statistics in HashTable =====\n";
+    cout << "Number of data: " << hashTable.getSize() << endl;
+    cout << "Load factor: " << hashTable.loadFactor() << endl;
+    cout << "Longest chain in hash table: " << hashTable.getLongestChain() << endl;
+    cout << "Empty buckets: " << hashTable.getEmptyBuckets() << endl << endl; 
 }
 
 void iDisplay(const string &item, int level)

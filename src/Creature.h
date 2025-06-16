@@ -56,12 +56,12 @@ class Creature
 
         // Other methods
         // print a creature
-        void vPrintCreature();
+        void vPrintCreature() const;
 
 };
 
 // vertical print a creature
-inline void Creature::vPrintCreature()
+inline void Creature::vPrintCreature() const
 {
     cout << "Creature ID: " << creatureID << endl;
     cout << "Name: " << name << endl;

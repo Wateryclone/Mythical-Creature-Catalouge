@@ -48,7 +48,7 @@ int HashTable::insert(const Creature& creature) {
 }
 
 // Search implementation
-Creature* HashTable::search(const string& creatureID) {
+const Creature* HashTable::search(const string& creatureID) const {
     int index = hashFunction(creatureID);
     for (auto& entry : table[index]) {
         if (entry.key == creatureID) {

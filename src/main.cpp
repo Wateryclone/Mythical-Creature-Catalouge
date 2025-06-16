@@ -10,12 +10,7 @@
 #include "Creature.h"
 #include "ScreenManager.h"
 
-
 using namespace std;
-
-// void buildCreatureList(HashTable<Creature> &, BinaryTree<Creature> &, string<Creature> &);
-// void runMainMenu(HashTable<Creature> &, BinaryTree<creature> &);
-// void printGoodbye();
 
 int main()
 {
@@ -61,12 +56,26 @@ int main()
                 cout << "File " << filename << " was successfully loaded!" << endl;
             }
         }
+        else if (cmd == "S")
+        {
+            cout << "===== Searching =====" << endl;
+            searchManager(hashTable);
+
+        }
+        else if (cmd =="P")
+        {
+            cout << "===== All stored data in order =====" << endl;
+            bst.inOrder(hDisplay);
+
+            // For debugging: hidden indented tree
+            cout << "\n===== BST indented tree ===== " << endl;
+            bst.printTree(iDisplay);
+        }
         else if (cmd == "Q")
         {
             cout << "Thank you for visiting!" << endl;
             return 0;
         }
-
 
         cout << "User command: ";
         getline(cin, cmd);

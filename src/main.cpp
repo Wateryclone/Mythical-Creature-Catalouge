@@ -5,6 +5,7 @@
 #include <string>
 #include <cctype>
 #include <stack>
+#include <cassert>
 
 #include "BinarySearchTree.h"
 #include "HashTable.h"
@@ -94,6 +95,25 @@ int main()
         else if (cmd == "T")
         {
             statisticsManager(hashTable);
+        }
+        else if (cmd == "W")
+        {
+            cout << "===== Saving data to file: ";
+            string outputFileName;
+            getline(cin, outputFileName);
+
+            // -------------TODO: place holder for file save data-------------
+            
+            // saveData(outFileName, hashTable);
+            // ---------------- End placeholder---------------
+
+            cout << "Data is saved in \"" << outputFileName << "\"" << endl;
+
+            while (!stk.empty()) {
+                stk.pop();
+            }
+            assert(stk.empty());
+
         }
         else if (cmd == "Q")
         {

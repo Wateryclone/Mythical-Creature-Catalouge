@@ -45,6 +45,7 @@ public:
     float loadFactor() const;
     int getLongestChain() const;
     int getEmptyBuckets() const;
+    int getSize() const { return size; }
 
     // For debugging
     void printTable() const;

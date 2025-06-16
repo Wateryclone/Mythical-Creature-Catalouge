@@ -24,7 +24,16 @@ class Creature
 
     public:
         // Constructors
-        Creature();
+        Creature()
+        {
+            creatureID = "dummy";
+            name = "dummy";
+            category = "dummy";
+            history = "dummy";
+            habitat = "dummy";
+            description = "dummy";
+            releventYear = 0;
+        }
         Creature(string id, string n, string cat, string hist,
                  string hab, string desc, int y)
                  {
@@ -57,6 +66,15 @@ class Creature
         // Other methods
         // print a creature
         void vPrintCreature() const;
+            
+        // friend std::ostream& operator<<(std::ostream& os, const Creature& creature) 
+        // {
+        //     // you can use vPrintCreature, or custom print fields here
+        //     os << "ID: " << creature.getCreatureID() << "\n";
+        //     os << "Name: " << creature.getName() << "\n";
+        //     // add the rest of the fields
+        //     return os;
+        // }
 
 };
 

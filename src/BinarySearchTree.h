@@ -95,6 +95,11 @@ inline bool BinarySearchTree<KeyType>::remove(const KeyType &key)
 template <class KeyType>
 bool BinarySearchTree<KeyType>::insert(const int &ind, const KeyType &newEntry)
 {
+    KeyType returnItem;
+    if (search(newEntry, returnItem))
+    {
+        return false;
+    }
     BinaryNode<KeyType> *newNodePtr = new BinaryNode<KeyType>(ind, newEntry);
     this->rootPtr = _insert(this->rootPtr, newNodePtr);
     this->count++;

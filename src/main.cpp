@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <string>
 #include <cctype>
+#include <stack>
 
 #include "BinarySearchTree.h"
 #include "HashTable.h"
@@ -19,6 +20,7 @@ int main()
     string cmd;
     BinarySearchTree<string> bst;
     HashTable hashTable;
+    stack<Creature> stk;
 
     printWelcome();
     cout << "User command: ";
@@ -67,6 +69,17 @@ int main()
             cout << "===== Adding a new creature =====" << endl;
             insertManager(bst, hashTable);
 
+        }
+        else if (cmd == "D")
+        {
+            cout << "===== Deleting a creature =====" << endl;
+            deleteManager(bst, hashTable, stk);
+
+        }
+        else if (cmd == "U")
+        {
+            cout << "===== Undo deleting =====" << endl;
+            undoDeleteManager(bst, hashTable, stk);
         }
         else if (cmd == "P")
         {

@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <string>
 #include <cctype>
+#include <stack>
 
 using namespace std;
 
@@ -15,6 +16,8 @@ void printWelcome();
 int buildDataStructure( const string &filename, BinarySearchTree<string> &bst, HashTable &hashTable );
 void searchManager(const HashTable &hashTable);
 void insertManager(BinarySearchTree<string> &bst, HashTable &hashTable);
+void deleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk);
+void undoDeleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk);
 void statisticsManager(const HashTable &hashTable);
 void iDisplay(const string &item, int level);
 void hDisplay(const string &item);
@@ -154,6 +157,88 @@ void insertManager(BinarySearchTree<string> &bst, HashTable &hashTable)
     int ind = hashTable.insert(newCreature);
     bool resInsert = bst.insert(ind, newCreature.getCreatureID());
 
+    if ( resInsert )
+    {
+        cout << "New creature " << creatureID << " was inserted!" << endl;
+    }
+    else
+    {
+        cout << "Cannot insert creature: " << creatureID << endl;
+        cout << "It might exist in the database already!" << endl;
+    }
+
+}
+
+void deleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk)
+{
+    cout << "Please enter a creature ID to delete: ";
+    string targetID;
+    getline(cin, targetID);
+
+    Creature temp;
+    const Creature* returnCreature = hashTable.search(targetID);
+    if (returnCreature == nullptr)
+    {
+        cout << "Creature " << targetID << "does NOT exist!" << endl;
+        return;
+    }
+    else
+    {
+        temp.setCreatureID(returnCreature->getCreatureID());
+        temp.setName(returnCreature->getName());
+        temp.setHistory(returnCreature->getHistory());
+        temp.setCategory(returnCreature->getCategory());
+        temp.setHabitat(returnCreature->getHabitat());
+        temp.setDescription(returnCreature->getDescription());
+        temp.setReleventYear(returnCreature->getReleventYear());
+
+        stk.push(temp);
+    }
+
+    bool resBST = bst.remove(targetID);
+    bool resHashTable = hashTable.remove(targetID);
+    if (resBST and resHashTable)
+    {
+        cout << "Creature " << targetID << " was successfully deleted!" << endl;
+        // For debugging
+        // cout << "Top of stack: " << stk.top().getCreatureID() << endl;
+    }
+    else
+    {
+        cout << "CANNOT delete creature " << targetID << "!" << endl;
+        // insert back if delete failed
+        int ind = hashTable.insert(temp); // no operation if duplicated
+        bool resInsert = bst.insert(ind, temp.getCreatureID());
+            
+    }
+}
+
+void undoDeleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk)
+{
+    if ( stk.empty() )
+    {
+        cout << "Undo delete impossible!" << endl;
+    }
+    else
+    {
+        Creature temp = stk.top();
+
+        int ind = hashTable.insert(temp);
+        bool resInsert = bst.insert(ind, temp.getCreatureID());
+
+        if (resInsert)
+        {
+            cout << "Undo delete succeeded!" << endl;
+            stk.pop();
+            //For debugging
+            cout << "There are " << stk.size() << " elements in stack." << endl;
+        }
+        else
+        {
+            cout << "CANNOT undo delete!" << endl;
+        }
+
+    }
 }
 
 void statisticsManager(const HashTable &hashTable)

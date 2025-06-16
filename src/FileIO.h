@@ -10,8 +10,7 @@ File I/O
 #include <sstream>
 #include "BinarySearchTree.h"
 #include "Creature.h"
-// Placeholder for hash table header
-// #include "HashTable.h"
+#include "HashTable.h"
 
 struct Record {
     std::string creatureID;
@@ -35,11 +34,11 @@ public:
     void saveData(const std::string& outFilename) const;
 
 private:
-    std::string                fileName;
-    std::ifstream              inFile;
-    BinarySearchTree<Creature> bst;
-    // HashTable<Creature>*      hashTable;     // placeholder for HashTable class
-    int                        tableSize;
+    std::string              fileName;
+    std::ifstream            inFile;
+    BinarySearchTree<string> bst;
+    HashTable*               hashTable;
+    int                      tableSize;
 
     // Helpers for sizing / rehashing
     static bool isPrime(int n);
@@ -57,7 +56,7 @@ inline FileIO::FileIO(const std::string& filename)
   : fileName(filename),
     inFile(filename),
     bst(),
-    // hashTable(nullptr), // placeholder for HashTable class
+    hashTable(nullptr),
     tableSize(0)
 {
     if (!inFile.is_open()) {
@@ -79,7 +78,7 @@ inline FileIO::FileIO(const std::string& filename)
     tableSize = nextPrime(lines * 2);
 
     // construct hash table with size
-    // hashTable = new HashTable<Creature>(tableSize); // placeholder for HashTable class
+    hashTable = new HashTable(tableSize); // placeholder for HashTable class
 
     // Load data
     loadData();
@@ -87,15 +86,16 @@ inline FileIO::FileIO(const std::string& filename)
 
 inline FileIO::~FileIO()
 {
-    // if (hashTable) {
-    //     delete hashTable;
-    // }
+    if (hashTable) {
+        delete hashTable;
+    }
+    
     if (inFile.is_open()) {
         inFile.close();
     }
 }
 
-// TODO implemented in ScreenManager.h, need to remove duplication
+// Implemented in ScreenManager.h, need to remove duplication
 inline void FileIO::loadData()
 {
     std::string line;
@@ -115,18 +115,13 @@ inline void FileIO::loadData()
 
         Creature c = Creature(record.creatureID, record.name, record.category, record.history, record.habitat, record.description, record.releventYear);
 
-        // ---------- placeholder for HashTable class ----------
-
-        // int idx = hashTable.insert(c);        
-
+        int idx = hashTable->insert(c);        
         // only insert (key, idx) into BST
-        // bst.insert(std::make_pair(c.getCreatureID(), idx));
-
+        bst.insert(idx, c.getCreatureID());
         // If load factor > 0.75, rehash is required
-        // if (hashTable.loadFactor() > 0.75)
-        //     rehash();
+        if (hashTable->loadFactor() > 0.75)
+            rehash();
 
-        // ---------- end placeholder ----------
     }
 }
 
@@ -137,43 +132,30 @@ inline void FileIO::saveData(const std::string& outFilename) const
         throw std::runtime_error("Unable to open output file: " + outFilename);
     }
 
-    // ---------- placeholder for HashTable class ----------
-    // e.g. auto items = hashTable->itemsInTableOrder();
-    // for (const Creature& c : items) { … }
-
-    // for (/* each Creature c from hashTable in table-order */) {
-
-    //     const Creature& c = /* hashTable item placeholder */;
-
-    //     out  << c.getCreatureID() << ';'
-    //          << c.getName()          << ';'
-    //          << c.getCategory()      << ';'
-    //          << c.getHistory()       << ';'
-    //          << c.getHabitat()       << ';'
-    //          << c.getDescription()   << ';'
-    //          << c.getReleventYear()
-    //          << c.getReleventYear()
-    //          << '\n';
-    // }
-    // ---------- end placeholder ----------
-
+    for (const Creature& c : hashTable->getAllCreatures()) {
+        out  << c.getCreatureID() << ';'
+             << c.getName()          << ';'
+             << c.getCategory()      << ';'
+             << c.getHistory()       << ';'
+             << c.getHabitat()       << ';'
+             << c.getDescription()   << ';'
+             << c.getReleventYear()
+             << c.getReleventYear()
+             << '\n';
+    }
     out.close();
 }
 
 inline void FileIO::rehash()
 {
     int newSize = nextPrime(tableSize * 2);
-    // ---------- placeholder for HashTable class ----------
-    // HashTable<Creature>* newTable = new HashTable<Creature>(newSize);
-
+    HashTable* newTable = new HashTable(newSize);
     // traverse old table and re-insert each item
-    // for (/* each Creature c from hashTable in table-order */) {
-    //     newTable->insert(c);
-    // }
-
-    // delete hashTable;
-    // hashTable = newTable;
-    // ---------- end placeholder ----------
+    for (const Creature& c : hashTable->getAllCreatures()) {
+        newTable->insert(c);
+    }
+    delete hashTable;
+    hashTable = newTable;
     tableSize = newSize;
 }
 

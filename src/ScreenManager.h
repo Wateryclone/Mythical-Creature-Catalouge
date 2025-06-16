@@ -11,7 +11,11 @@ using namespace std;
 #include "BinarySearchTree.h"
 #include "HashTable.h"
 
+void printWelcome();
+int buildDataStructure( const string &filename, BinarySearchTree<string> &bst, HashTable &hashTable );
+void searchManager(const HashTable &hashTable);
 void iDisplay(const string &item, int level);
+void hDisplay(const string &item);
 
 void printWelcome()
 {
@@ -22,6 +26,7 @@ void printWelcome()
     cout << indentation << "[A] - Add data" << endl;
     cout << indentation << "[S] - Search data (Primary key: creature_id)" << endl;
     cout << indentation << "[D] - Delete data" << endl;
+    cout << indentation << "[U] - Undo delete" << endl;
     cout << indentation << "[P] - Print data" << endl;
     cout << indentation << "[T] - Show statistics" << endl;
     cout << indentation << "[W] - Write to file" << endl;
@@ -30,7 +35,6 @@ void printWelcome()
 
 }
 
-// void buildDataStructure(const string &filename, BinarySearchTree<Creature> &bst, HashMap<Creature> &hashMap)
 int buildDataStructure( const string &filename, BinarySearchTree<string> &bst, HashTable &hashTable )
 {
     ifstream fin(filename);
@@ -67,27 +71,46 @@ int buildDataStructure( const string &filename, BinarySearchTree<string> &bst, H
         // create a Creature object and initialize it with data from file
         Creature aCreature(creatureID, name, category, history, habitat, description, releventYear);
 
-        aCreature.vPrintCreature();
+        // For debugging
+        // aCreature.vPrintCreature();
         
         int ind = hashTable.insert(aCreature); // TODO to implemnet
         bool resInsert = bst.insert(ind, aCreature.getCreatureID()); // TODO to implemnet
 
         // For debugging
-        if ( ind > -1 && resInsert ) 
-            cout << aCreature.getCreatureID() << " is inserted successfully." << endl;
-        else
-            cout << aCreature.getCreatureID() << " is NOT inserted." << endl;
+        // if ( ind > -1 && resInsert ) 
+        //     cout << aCreature.getCreatureID() << " is inserted successfully." << endl;
+        // else
+        //     cout << aCreature.getCreatureID() << " is NOT inserted." << endl;
         
     }
 
     // For debugging
-    cout << "====== Built HashTable =====" << endl;
-    hashTable.printTable();    
-    cout << "====== Built BST =====" << endl;
-    bst.printTree(iDisplay);
+    // cout << "====== Built HashTable =====" << endl;
+    // hashTable.printTable();    
+    // cout << "====== Built BST =====" << endl;
+    // bst.printTree(iDisplay);
 
     return 1;
 
+}
+
+void searchManager(const HashTable &hashTable)
+{
+    cout << "Please enter a creature ID: ";
+    string targetID;
+    getline(cin, targetID);
+
+    const Creature* returnCreature = hashTable.search(targetID);
+    if (returnCreature != nullptr)
+    {
+        cout << "\nFound the creature \"" << targetID << "\":" << endl << endl;
+        returnCreature->vPrintCreature();
+    }
+    else
+    {
+        cout << "Creature \"" << targetID << "\" - not found" << endl;
+    }
 }
 
 void iDisplay(const string &item, int level)
@@ -96,4 +119,9 @@ void iDisplay(const string &item, int level)
         cout << "..";
     cout << level << "). " << item << endl;
     
+}
+
+void hDisplay(const string &item)
+{
+    cout << "(" << item << ") ";
 }

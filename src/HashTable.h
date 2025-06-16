@@ -33,7 +33,7 @@ public:
     int insert(const Creature& creature);
 
     // Search by creatureID
-    Creature* search(const string& creatureID);
+    const Creature* search(const string& creatureID) const;
 
     // Delete by creatureID
     bool remove(const string& creatureID);

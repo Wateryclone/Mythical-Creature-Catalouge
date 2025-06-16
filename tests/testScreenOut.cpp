@@ -24,6 +24,7 @@ void testPrintWelcome() {
         "  [A] - Add data\n"
         "  [S] - Search data (Primary key: creature_id)\n"
         "  [D] - Delete data\n"
+        "  [U] - Undo delete\n"
         "  [P] - Print data\n"
         "  [T] - Show statistics\n"
         "  [W] - Write to file\n"

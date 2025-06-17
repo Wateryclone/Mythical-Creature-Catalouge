@@ -19,111 +19,153 @@ int main()
 
     string filename = "Creatures.txt";
     string cmd;
-    BinarySearchTree<string> bst;
-    HashTable hashTable;
+    // BinarySearchTree<string> bst;
+    // HashTable hashTable;
     stack<Creature> stk;
-
+    FileIO file;
+    cout << "Warning: Data file not loaded. All commands except for loading file are currently unavailable." << endl;
     printWelcome();
     cout << "User command: ";
     getline(cin, cmd);
 
     while (true)
     {
+        bool ok = file.is_ready();
+        if (!ok)
+            cout << "Warning: Data file not loaded. All commands except for loading a file are currently unavailable." << endl;
 
-        for (char& c : cmd) 
+        for (char &c : cmd)
         {
             c = toupper(static_cast<unsigned char>(c));
         }
 
-        if (cmd == "H")
+        // If the file is not open
+        if (!ok)
         {
-            printWelcome();
-        } 
-        else if (cmd == "L")
-        {
-            cout << "What is the input file's name? 'Y' for Default: Creatures.txt ";
-            getline(cin, filename);
-    
-            if ( filename == "Y" or filename == "y")
-                filename = "Creatures.txt";
-            
-            int loadSuc = buildDataStructure(filename, bst, hashTable);
-
-            if ( loadSuc == -1)
+            if (cmd == "H")
             {
-                cout << "Reenter your data file..." << endl;
-                cmd = "L";
+                printWelcome();
+            }
+            else if (cmd == "L")
+            {
+                cout << "What is the input file's name? Press Enter for Default \"Creatures.txt\": ";
+                getline(cin, filename);
+
+                if (filename.empty())
+                    filename = "Creatures.txt";
+
+                int loadSuc = buildDataStructure(filename, file);
+
+                if (loadSuc == -1)
+                {
+                    cout << "Reenter your data file..." << endl;
+                    cmd = "L";
+                }
+                else
+                {
+                    cout << "File " << filename << " was successfully loaded!" << endl;
+                }
+            }
+            else if (cmd == "Q")
+            {
+                cout << "Thank you for visiting!" << endl;
+                return 0;
             }
             else
             {
-                cout << "File " << filename << " was successfully loaded!" << endl;
+                cout << "Invalid command " << cmd << endl;
+                printWelcome();
             }
         }
-        else if (cmd == "S")
-        {
-            cout << "===== Searching =====" << endl;
-            searchManager(hashTable);
-
-        }
-        else if (cmd == "A")
-        {
-            cout << "===== Adding a new creature =====" << endl;
-            insertManager(bst, hashTable);
-
-        }
-        else if (cmd == "D")
-        {
-            cout << "===== Deleting a creature =====" << endl;
-            deleteManager(bst, hashTable, stk);
-
-        }
-        else if (cmd == "U")
-        {
-            cout << "===== Undo deleting =====" << endl;
-            undoDeleteManager(bst, hashTable, stk);
-        }
-        else if (cmd == "P")
-        {
-            cout << "===== All stored data in order =====" << endl;
-            bst.inOrder(hDisplay);
-            cout << endl;
-
-            // For debugging: hidden indented tree
-            // cout << "\n===== BST indented tree ===== " << endl;
-            // bst.printTree(iDisplay);
-        }
-        else if (cmd == "T")
-        {
-            statisticsManager(hashTable);
-        }
-        else if (cmd == "W")
-        {
-            cout << "===== Saving data to file: ";
-            string outputFileName;
-            getline(cin, outputFileName);
-
-            // -------------TODO: place holder for file save data-------------
-            
-            // saveData(outFileName, hashTable);
-            // ---------------- End placeholder---------------
-
-            cout << "Data is saved in \"" << outputFileName << "\"" << endl;
-
-            while (!stk.empty()) {
-                stk.pop();
-            }
-            assert(stk.empty());
-
-        }
-        else if (cmd == "Q")
-        {
-            cout << "Thank you for visiting!" << endl;
-            return 0;
-        }
+        // If the file is open
         else
         {
-            cout << "Invalid command " << cmd << endl;
-            printWelcome();
+            if (cmd == "H")
+            {
+                printWelcome();
+            }
+            else if (cmd == "L")
+            {
+                cout << "What is the input file's name? Press Enter for Default Creatures.txt ";
+                getline(cin, filename);
+
+                if (filename.empty())
+                    filename = "Creatures.txt";
+
+                int loadSuc = buildDataStructure(filename, file);
+
+                if (loadSuc == -1)
+                {
+                    cout << "Reenter your data file..." << endl;
+                    cmd = "L";
+                }
+                else
+                {
+                    cout << "File " << filename << " was successfully loaded!" << endl;
+                }
+            }
+            else if (cmd == "S")
+            {
+                cout << "===== Searching =====" << endl;
+                searchManager(file);
+            }
+            else if (cmd == "A")
+            {
+                cout << "===== Adding a new creature =====" << endl;
+                insertManager(file);
+            }
+            else if (cmd == "D")
+            {
+                cout << "===== Deleting a creature =====" << endl;
+                deleteManager(file, stk);
+            }
+            else if (cmd == "U")
+            {
+                cout << "===== Undo deleting =====" << endl;
+                undoDeleteManager(file, stk);
+            }
+            else if (cmd == "P")
+            {
+                cout << "===== All stored data in order =====" << endl;
+                file.inOrder(hDisplay);
+                cout << endl;
+
+                // For debugging: hidden indented tree
+                // cout << "\n===== BST indented tree ===== " << endl;
+                // bst.printTree(iDisplay);
+            }
+            else if (cmd == "T")
+            {
+                statisticsManager(file);
+            }
+            else if (cmd == "W")
+            {
+                cout << "===== Saving data to file: ";
+                string outputFileName;
+                getline(cin, outputFileName);
+
+                // -------------TODO: place holder for file save data-------------
+                file.saveData(outputFileName);
+                // ---------------- End placeholder---------------
+
+                cout << "Data is saved in \"" << outputFileName << ".txt" << "\"" << endl;
+
+                while (!stk.empty())
+                {
+                    stk.pop();
+                }
+                assert(stk.empty());
+            }
+            else if (cmd == "Q")
+            {
+                cout << "Thank you for visiting!" << endl;
+                return 0;
+            }
+            else
+            {
+                cout << "Invalid command " << cmd << endl;
+                printWelcome();
+            }
         }
 
         cout << "\nUser command: ";

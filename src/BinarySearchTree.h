@@ -1,6 +1,6 @@
 /**~*~*~*
  Binary Search Tree ADT - search
- Note: This ADT accepts duplicate!!!
+ Note: This ADT does not accept duplicate!
 ================================
 *~*/
 
@@ -18,11 +18,11 @@ public:
     // remove a node if found
     // bool remove(const KeyType &item);
     // find a target node
-    bool search(const KeyType &target, KeyType &returnedItem) const;
+    bool search(const KeyType &target, int &returnedIdx) const;
     // find the smallest node
-    bool findSmallest(KeyType &returnedItem) const;
+    bool findSmallest(int &returnedIdx) const;
     // find the largest node
-    bool findLargest(KeyType &returnedItem) const;
+    bool findLargest(int &returnedIdx) const;
     // remove a node if found
     bool remove(const KeyType &key);
 
@@ -55,12 +55,12 @@ private:
 ///////////////////////// public function definitions ///////////////////////////
 // Wrapper for _findSmallest - Finding the smallest node in the tree
 template <class KeyType>
-bool BinarySearchTree<KeyType>::findSmallest(KeyType &returnedItem) const
+bool BinarySearchTree<KeyType>::findSmallest(int &returnedIdx) const
 {
     BinaryNode<KeyType> *smallestNode = _findSmallest(this->rootPtr);
     if (smallestNode)
     {
-        returnedItem = smallestNode->getKey();
+        returnedIdx = smallestNode->getIndex();
         return true;
     }
     return false;
@@ -68,12 +68,12 @@ bool BinarySearchTree<KeyType>::findSmallest(KeyType &returnedItem) const
 
 // Wrapper for _findLargest - Finding the largest node in the tree
 template <class KeyType>
-bool BinarySearchTree<KeyType>::findLargest(KeyType &returnedItem) const
+bool BinarySearchTree<KeyType>::findLargest(int &returnedIdx) const
 {
     BinaryNode<KeyType> *largestNode = _findLargest(this->rootPtr);
     if (largestNode)
     {
-        returnedItem = largestNode->getKey();
+        returnedIdx = largestNode->getIndex();
         return true;
     }
     return false;
@@ -95,8 +95,8 @@ inline bool BinarySearchTree<KeyType>::remove(const KeyType &key)
 template <class KeyType>
 bool BinarySearchTree<KeyType>::insert(const int &ind, const KeyType &newEntry)
 {
-    KeyType returnItem;
-    if (search(newEntry, returnItem))
+    int returnIdx;
+    if (search(newEntry, returnIdx))
     {
         return false;
     }
@@ -108,16 +108,16 @@ bool BinarySearchTree<KeyType>::insert(const int &ind, const KeyType &newEntry)
 
 // Wrapper for _search
 //  - it calls the private _search function that returns a Node pointer or NULL
-//  - if found, it copies data from that node and sends it back to the caller
+//  - if found, it sends its hashtable index back to the caller
 //    via the output parameter, and returns true, otherwise it returns false.
 template <class KeyType>
-bool BinarySearchTree<KeyType>::search(const KeyType &anEntry, KeyType &returnedItem) const
+bool BinarySearchTree<KeyType>::search(const KeyType &anEntry, int &returnedIdx) const
 {
     BinaryNode<KeyType> *temp = nullptr;
     temp = _search(this->rootPtr, anEntry);
     if (temp)
     {
-        returnedItem = temp->getKey();
+        returnedIdx = temp->getIndex();;
         return true;
     }
     return false;

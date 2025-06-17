@@ -26,10 +26,10 @@ int HashTable::hashFunction(const string& key) const {
 
 // Insert implementation
 int HashTable::insert(const Creature& creature) {
-    float lf = loadFactor();
-    if (lf > 0.75) {
-        rehash();
-    }
+    // float lf = loadFactor();
+    // if (lf > 0.75) {
+    //     rehash();
+    // }
 
     string key = creature.getCreatureID();
     int index = hashFunction(key);

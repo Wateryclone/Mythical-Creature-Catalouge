@@ -14,6 +14,19 @@ using namespace std;
 #include "BinarySearchTree.h"
 #include "HashTable.h"
 
+namespace Color {
+    constexpr const char* RESET   = "\033[0m";
+    constexpr const char* RED     = "\033[31m";
+    constexpr const char* GREEN   = "\033[32m";
+    constexpr const char* YELLOW  = "\033[33m";
+    constexpr const char* BLUE    = "\033[34m";
+    constexpr const char* MAGENTA = "\033[35m";
+    constexpr const char* CYAN    = "\033[36m";
+    constexpr const char* WHITE   = "\033[37m";
+    constexpr const char* BOLD    = "\033[1m";
+}
+using namespace Color;
+
 void printWelcome();
 // int buildDataStructure(const string &filename, BinarySearchTree<string> &bst, HashTable &hashTable);
 // void searchManager(const HashTable &hashTable);
@@ -26,28 +39,26 @@ void hDisplay(const string &item);
 
 void printWelcome()
 {
-    string indentation(2, ' ');
-
-    cout << "Main Menu:" << endl;
-    cout << indentation << "[L] - Load data file" << endl;
-    cout << indentation << "[A] - Add data" << endl;
-    cout << indentation << "[S] - Search data (Primary key: creature_id)" << endl;
-    cout << indentation << "[D] - Delete data" << endl;
-    cout << indentation << "[U] - Undo delete" << endl;
-    cout << indentation << "[P] - Print data" << endl;
-    cout << indentation << "[T] - Show statistics" << endl;
-    cout << indentation << "[W] - Write to file" << endl;
-    cout << indentation << "[H] - Help" << endl;
-    cout << indentation << "[Q] - Quit" << endl;
+    cout << BOLD << CYAN << "Main Menu:" << RESET << endl;
+    cout << "  " << BOLD << GREEN   << "[L]" << RESET << " - Load data file" << endl;
+    cout << "  " << BOLD << BLUE    << "[A]" << RESET << " - Add data" << endl;
+    cout << "  " << BOLD << MAGENTA << "[S]" << RESET << " - Search data (Primary key: creature_id)" << endl;
+    cout << "  " << BOLD << RED     << "[D]" << RESET << " - Delete data" << endl;
+    cout << "  " << BOLD << YELLOW  << "[U]" << RESET << " - Undo delete" << endl;
+    cout << "  " << BOLD << WHITE   << "[P]" << RESET << " - Print data" << endl;
+    cout << "  " << BOLD << CYAN    << "[T]" << RESET << " - Show statistics" << endl;
+    cout << "  " << BOLD << GREEN   << "[W]" << RESET << " - Write to file" << endl;
+    cout << "  " << BOLD << BLUE    << "[H]" << RESET << " - Help" << endl;
+    cout << "  " << BOLD << MAGENTA << "[Q]" << RESET << " - Quit" << endl;
 }
 
 int buildDataStructure(const string &filename, FileIO &file)
 {
-    cout << "Reading data from \"" << filename << "...\"" << endl;
+    cout << BOLD << CYAN << "Reading data from " << BOLD << YELLOW << "\"" << filename << "...\"" << RESET << endl;
     bool ok = file.init(filename);
     if (!ok)
     {
-        cout << "Error opening the input file: \"" << filename << "\"" << endl;
+        cout << BOLD << RED << "Error opening the input file: " << BOLD << YELLOW << "\""<< filename << "\"" << RESET << endl;
         return -1;
     }
     return 1;
@@ -55,20 +66,20 @@ int buildDataStructure(const string &filename, FileIO &file)
 
 void searchManager(FileIO &file)
 {
-    cout << "Please enter a creature ID: ";
+    cout << BOLD << CYAN << "Please enter a creature ID: " << RESET ;
     string targetID;
     getline(cin, targetID);
 
     bool found = file.search(targetID);
     if (found)
     {
-        cout << "\nFound the creature \"" << targetID << "\":" << endl
-             << endl;
+        cout << BOLD << GREEN << "\nFound the creature " << BOLD << YELLOW << "\"" << targetID << "\":" << BOLD << CYAN << endl << endl;
         file.getCreature(targetID).vPrintCreature();
+        cout << RESET;
     }
     else
     {
-        cout << "Creature \"" << targetID << "\" - not found" << endl;
+        cout << BOLD << RED << "Creature " << BOLD << YELLOW << "\"" << targetID << "\"" << BOLD << RED << " - not found" << RESET << endl;
     }
 }
 
@@ -83,31 +94,31 @@ void insertManager(FileIO &file)
     string description; // eg. "Fiery bird with radiant plumage, capable of resurrection through immolation and rebirth."
     int releventYear;   // year of first mention in history
 
-    cout << "Please enter a creature ID: ";
+    cout << BOLD << CYAN << "Please enter a creature ID: " << RESET ;
     getline(cin, creatureID);
     while (file.search(creatureID))
     {
-        cout << "\"" + creatureID + "\" already exists!" << endl;
-        cout << "Please re-enter: ";
+        cout << BOLD << YELLOW << "\"" <<  creatureID << "\"" << BOLD << RED <<" already exists!" << RESET << endl;
+        cout << BOLD << CYAN << "Please re-enter: "<< RESET;
         getline(cin, creatureID);
     }
 
-    cout << "Please enter a creature name: ";
+    cout << BOLD << CYAN << "Please enter a creature name: " << RESET;
     getline(cin, name);
 
-    cout << "Please enter a creature category: ";
+    cout << BOLD << CYAN << "Please enter a creature category: " << RESET;
     getline(cin, category);
 
-    cout << "Please enter a creature history: ";
+    cout << BOLD << CYAN << "Please enter a creature history: " << RESET;
     getline(cin, history);
 
-    cout << "Please enter a creature habitat: ";
+    cout << BOLD << CYAN << "Please enter a creature habitat: " << RESET;
     getline(cin, habitat);
 
-    cout << "Please enter a creature description: ";
+    cout << BOLD << CYAN << "Please enter a creature description: " << RESET;
     getline(cin, description);
 
-    cout << "Please enter a creature year: ";
+    cout << BOLD << CYAN << "Please enter a creature year: " << RESET;
     string year;
     getline(cin, year);
     releventYear = stoi(year);
@@ -116,18 +127,18 @@ void insertManager(FileIO &file)
 
     if (file.insert(newCreature))
     {
-        cout << "New creature " << creatureID << " was inserted!" << endl;
+        cout << BOLD << GREEN << "New creature " << BOLD << YELLOW << creatureID << BOLD << GREEN << " was inserted!" << RESET << endl;
     }
     else
     {
-        cout << "Cannot insert creature: " << creatureID << endl;
-        cout << "It might exist in the database already!" << endl;
+        cout << BOLD << RED << "Cannot insert creature: " << BOLD << YELLOW << creatureID << RESET << endl;
+        cout << BOLD << RED << "It might exist in the database already!" << RESET << endl;
     }
 }
 
 void deleteManager(FileIO &file, stack<Creature> &stk)
 {
-    cout << "Please enter a creature ID to delete: ";
+    cout << BOLD << CYAN << "Please enter a creature ID to " << BOLD << RED << "delete: " << RESET;
     string targetID;
     getline(cin, targetID);
 
@@ -140,7 +151,7 @@ void deleteManager(FileIO &file, stack<Creature> &stk)
     }
     else
     {
-        cout << "Creature " << targetID << "does NOT exist!" << endl;
+        cout << BOLD << RED << "Creature " << BOLD << YELLOW << targetID << BOLD << RED << "does NOT exist!" << RESET << endl;
         return;
     }
 
@@ -158,13 +169,13 @@ void deleteManager(FileIO &file, stack<Creature> &stk)
 
     if (file.del(targetID))
     {
-        cout << "Creature " << targetID << " was successfully deleted!" << endl;
+        cout << BOLD << GREEN << "Creature " << BOLD << YELLOW << targetID << BOLD << GREEN << " was successfully deleted!" << RESET << endl;
         // For debugging
         // cout << "Top of stack: " << stk.top().getCreatureID() << endl;
     }
     else
     {
-        cout << "CANNOT delete creature " << targetID << "!" << endl;
+        cout << BOLD << RED << "CANNOT delete creature " << BOLD << YELLOW << targetID << BOLD << RED << "!" << RESET << endl;
         // // insert back if delete failed
         // int ind = hashTable.insert(temp); // no operation if duplicated
         // bool resInsert = bst.insert(ind, temp.getCreatureID());
@@ -175,7 +186,7 @@ void undoDeleteManager(FileIO &file, stack<Creature> &stk)
 {
     if (stk.empty())
     {
-        cout << "Undo delete impossible!" << endl;
+        cout << BOLD << RED << "Undo delete impossible!" << RESET << endl;
     }
     else
     {
@@ -183,26 +194,26 @@ void undoDeleteManager(FileIO &file, stack<Creature> &stk)
 
         if (file.insert(temp))
         {
-            cout << "Undo delete succeeded!" << endl;
+            cout << BOLD << GREEN << "Undo delete succeeded!" << RESET << endl;
             stk.pop();
             // For debugging
-            cout << "There are " << stk.size() << " elements in stack." << endl;
+            // cout << "There are " << stk.size() << " elements in stack." << endl;
         }
         else
         {
-            cout << "CANNOT undo delete!" << endl;
+            cout << BOLD << RED << "CANNOT undo delete!" << RESET << endl;
         }
     }
 }
 
 void statisticsManager(FileIO &file)
 {
-    cout << "===== Statistics in HashTable =====\n";
-    cout << "Number of data: " << file.getHashTableSize() << endl;
-    cout << "Load factor: " << file.getHashTableloadFactor() << endl;
-    cout << "Longest chain in hash table: " << file.getHashTableLongestChain() << endl;
-    cout << "Empty buckets: " << file.getHashTableEmptyBuckets() << endl;
-    cout << endl;
+    cout << BOLD << CYAN << "=========== Statistics in HashTable ===========\n";
+    cout << BOLD << BLUE << "Number of data: " << BOLD << YELLOW << file.getHashTableSize() << endl;
+    cout << BOLD << BLUE << "Load factor: " << BOLD << YELLOW << file.getHashTableloadFactor() << endl;
+    cout << BOLD << BLUE << "Longest chain in hash table: " << BOLD << YELLOW << file.getHashTableLongestChain() << endl;
+    cout << BOLD << BLUE << "Empty buckets: " << BOLD << YELLOW << file.getHashTableEmptyBuckets() << endl;
+    cout << RESET << endl;
 }
 
 void iDisplay(const string &item, int level)
@@ -214,5 +225,5 @@ void iDisplay(const string &item, int level)
 
 void hDisplay(const string &item)
 {
-    cout << "(" << item << ") ";
+    cout << BOLD << BLUE << "(" << BOLD << YELLOW << item << BOLD << BLUE << ") " << RESET ;
 }

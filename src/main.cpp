@@ -13,6 +13,7 @@
 #include "ScreenManager.h"
 
 using namespace std;
+using namespace Color;
 
 int main()
 {
@@ -23,16 +24,18 @@ int main()
     // HashTable hashTable;
     stack<Creature> stk;
     FileIO file;
-    cout << "Warning: Data file not loaded. All commands except for loading file are currently unavailable." << endl;
+    cout << BOLD << RED << "\nWarning: " << RESET << "Data file not loaded. All commands except for loading file are currently unavailable.\n"
+        << endl;
     printWelcome();
-    cout << "User command: ";
+    cout << BOLD << CYAN << "User command: " << RESET;
     getline(cin, cmd);
 
     while (true)
     {
         bool ok = file.is_ready();
         if (!ok)
-            cout << "Warning: Data file not loaded. All commands except for loading a file are currently unavailable." << endl;
+            cout << BOLD << RED << "\nWarning: " << RESET << "Data file not loaded. All commands except for loading file are currently unavailable.\n"
+                << endl;
 
         for (char &c : cmd)
         {
@@ -45,14 +48,14 @@ int main()
             switch (cmd[0])
             {
             case 'H':
-                {
+            {
                 printWelcome();
                 break;
-                }
-                
+            }
+
             case 'L':
-                {
-                cout << "What is the input file's name? Press Enter for Default \"Creatures.txt\": ";
+            {
+                cout << BOLD << CYAN << "What is the input file's name? Press Enter for Default " << BOLD << YELLOW << "\"Creatures.txt\"" << BOLD << CYAN << ": " << RESET;
                 getline(cin, filename);
 
                 if (filename.empty())
@@ -62,44 +65,44 @@ int main()
 
                 if (loadSuc == -1)
                 {
-                    cout << "Reenter your data file..." << endl;
+                    cout << BOLD << CYAN << "Reenter your data file..." << RESET << endl;
                     cmd = "L";
                 }
                 else
                 {
-                    cout << "File " << filename << " was successfully loaded!" << endl;
+                    cout << BOLD << GREEN << "File " << BOLD << YELLOW << filename << BOLD << GREEN << " was successfully loaded!" << RESET << endl;
                 }
                 break;
-                }
+            }
 
             case 'Q':
-                {
-                cout << "Thank you for visiting!" << endl;
+            {
+                cout << BOLD << GREEN << "Thank you for visiting!" << RESET << endl;
                 return 0;
-                }
-            
+            }
+
             default:
-                {
-                cout << "Invalid command " << cmd << endl;
+            {
+                cout << BOLD << RED << "Invalid command " << BOLD << YELLOW << cmd << RESET << endl;
                 printWelcome();
                 break;
-                }
+            }
             }
         }
 
         // If the file is open
         else
         {
-            switch(cmd[0])
+            switch (cmd[0])
             {
             case 'H':
-                {
+            {
                 printWelcome();
                 break;
-                }
+            }
             case 'L':
-                {
-                cout << "What is the input file's name? Press Enter for Default Creatures.txt ";
+            {
+                cout << BOLD << CYAN << "What is the input file's name? Press Enter for Default " << BOLD << YELLOW << "\"Creatures.txt\"" << BOLD << CYAN << ": " << RESET;
                 getline(cin, filename);
 
                 if (filename.empty())
@@ -109,46 +112,46 @@ int main()
 
                 if (loadSuc == -1)
                 {
-                    cout << "Reenter your data file..." << endl;
+                    cout << BOLD << CYAN << "Reenter your data file..." << RESET << endl;
                     cmd = "L";
                 }
                 else
                 {
-                    cout << "File " << filename << " was successfully loaded!" << endl;
+                    cout << BOLD << GREEN << "File " << BOLD << YELLOW << filename << BOLD << GREEN << " was successfully loaded!" << RESET << endl;
                 }
                 break;
-                }
+            }
             case 'S':
-                {
-                    cout << "===== Searching =====" << endl;
-                    searchManager(file);
-                
+            {
+                cout << BOLD << CYAN << "=========== Searching ===========" << RESET << endl;
+                searchManager(file);
+
                 break;
             }
             case 'A':
-                {
-                    cout << "===== Adding a new creature =====" << endl;
-                    insertManager(file);
-                    break;
-                }
+            {
+                cout << BOLD << CYAN << "=========== Adding a new creature ===========" << RESET << endl;
+                insertManager(file);
+                break;
+            }
 
             case 'D':
-                {
-                    cout << "===== Deleting a creature =====" << endl;
-                    deleteManager(file, stk);
-                
+            {
+                cout << BOLD << CYAN << "=========== Deleting a creature ===========" << RESET << endl;
+                deleteManager(file, stk);
+
                 break;
-                }
+            }
             case 'U':
-                {
-                    cout << "===== Undo deleting =====" << endl;
-                    undoDeleteManager(file, stk);
-                    break;
-                }
+            {
+                cout << BOLD << CYAN << "=========== Undo deleting ===========" << RESET << endl;
+                undoDeleteManager(file, stk);
+                break;
+            }
 
             case 'P':
-                {
-                cout << "===== All stored data in order =====" << endl;
+            {
+                cout << BOLD << CYAN << "=========== All stored data in order ===========" << RESET << endl;
                 file.inOrder(hDisplay);
                 cout << endl;
 
@@ -156,17 +159,17 @@ int main()
                 // cout << "\n===== BST indented tree ===== " << endl;
                 // bst.printTree(iDisplay);
                 break;
-                }
+            }
             case 'T':
-                {
-                    statisticsManager(file);
-                
+            {
+                statisticsManager(file);
+
                 break;
-                }
+            }
 
             case 'W':
-                {
-                cout << "===== Saving data to file: ";
+            {
+                cout << BOLD << CYAN << "Saving data to file: " << RESET;
                 string outputFileName;
                 getline(cin, outputFileName);
 
@@ -174,7 +177,7 @@ int main()
                 file.saveData(outputFileName);
                 // ---------------- End placeholder---------------
 
-                cout << "Data is saved in \"" << outputFileName << ".txt" << "\"" << endl;
+                cout << BOLD << CYAN << "Data is saved in \"" << BOLD << YELLOW << outputFileName << ".txt" << BOLD << CYAN << "\"" << RESET << endl;
 
                 while (!stk.empty())
                 {
@@ -182,26 +185,24 @@ int main()
                 }
                 assert(stk.empty());
                 break;
-                }
+            }
 
             case 'Q':
-                {
-                cout << "Thank you for visiting!" << endl;
+            {
+                cout << BOLD << GREEN << "Thank you for visiting!" << RESET << endl;
                 return 0;
-                }
+            }
 
             default:
-                {
-                cout << "Invalid command " << cmd << endl;
+            {
+                cout << BOLD << RED << "Invalid command " << BOLD << YELLOW << cmd << RESET << endl;
                 printWelcome();
                 break;
-                }
-
+            }
+            }
         }
-    }
 
-
-        cout << "\nUser command: ";
+        cout << BOLD << CYAN << "\nUser command: " << RESET;
         getline(cin, cmd);
     }
 }

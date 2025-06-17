@@ -19,6 +19,9 @@ public:
     // bool remove(const KeyType &item);
     // find a target node
     bool search(const KeyType &target, int &returnedIdx) const;
+
+    bool setIndex(const KeyType &target, const int &index);
+
     // find the smallest node
     bool findSmallest(int &returnedIdx) const;
     // find the largest node
@@ -46,10 +49,10 @@ private:
     BinaryNode<KeyType> *_removeNode(BinaryNode<KeyType> *targetNodePtr);
 
     // remove the leftmost node in the left subtree of nodePtr
-    BinaryNode<KeyType> *_removeLeftmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successor);
+    BinaryNode<KeyType> *_removeLeftmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successorKey, int &successorIdx);
 
     // remove the rightmost node in the right subtree of nodePtr
-    BinaryNode<KeyType> *_removeRightmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successor);
+    BinaryNode<KeyType> *_removeRightmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successorKey, int &successorIdx);
 };
 
 ///////////////////////// public function definitions ///////////////////////////
@@ -117,10 +120,21 @@ bool BinarySearchTree<KeyType>::search(const KeyType &anEntry, int &returnedIdx)
     temp = _search(this->rootPtr, anEntry);
     if (temp)
     {
-        returnedIdx = temp->getIndex();;
+        returnedIdx = temp->getIndex();
         return true;
     }
     return false;
+}
+
+template <class KeyType>
+inline bool BinarySearchTree<KeyType>::setIndex(const KeyType &target, const int &index)
+{
+    int dummy;
+    BinaryNode<KeyType> *node = _search(this->rootPtr, target);
+    if (!node)
+        return false;
+    node->setIdx(index);
+    return true;
 }
 
 //////////////////////////// private functions ////////////////////////////////////////////
@@ -128,7 +142,7 @@ bool BinarySearchTree<KeyType>::search(const KeyType &anEntry, int &returnedIdx)
 // Rewrite the private insert as a recursive function.
 template <class KeyType>
 BinaryNode<KeyType> *BinarySearchTree<KeyType>::_insert(BinaryNode<KeyType> *nodePtr,
-                                                          BinaryNode<KeyType> *newNodePtr)
+                                                        BinaryNode<KeyType> *newNodePtr)
 {
     if (!nodePtr) // == nullptr
     {
@@ -153,7 +167,7 @@ BinaryNode<KeyType> *BinarySearchTree<KeyType>::_insert(BinaryNode<KeyType> *nod
 // - returns a pointer to the node that matched the target
 template <class KeyType>
 BinaryNode<KeyType> *BinarySearchTree<KeyType>::_search(BinaryNode<KeyType> *nodePtr,
-                                                          const KeyType &target) const
+                                                        const KeyType &target) const
 {
     BinaryNode<KeyType> *found = nullptr;
     if (nodePtr == nullptr)
@@ -207,23 +221,27 @@ template <class KeyType>
 BinaryNode<KeyType> *BinarySearchTree<KeyType>::_remove(BinaryNode<KeyType> *nodePtr, const KeyType target, bool &success)
 {
     // If the nodePtr is null, the target is not found
-    if (nodePtr == nullptr) {
+    if (nodePtr == nullptr)
+    {
         return nullptr;
     }
     // If the target is less than the current node's item, search in the left subtree
-    if (target < nodePtr->getKey()) {
+    if (target < nodePtr->getKey())
+    {
         nodePtr->setLeftPtr(_remove(nodePtr->getLeftPtr(), target, success));
     }
     // If the target is greater than the current node's item, search in the right subtree
-    else if (target > nodePtr->getKey()) {
+    else if (target > nodePtr->getKey())
+    {
         nodePtr->setRightPtr(_remove(nodePtr->getRightPtr(), target, success));
     }
     // If the target is equal to the current node's item, we found the node to remove
-    else {
+    else
+    {
         success = true;
         return _removeNode(nodePtr);
     }
-    // If it does not hit 
+    // If it does not hit
     // or has been deleted in the lower layer
     // return the current node to the upper layer and continue to hang back recursively
     return nodePtr;
@@ -235,7 +253,8 @@ template <class KeyType>
 inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeNode(BinaryNode<KeyType> *targetNodePtr)
 {
     // If the target node is a leaf node, delete it and return nullptr
-    if (targetNodePtr->isLeaf()) {
+    if (targetNodePtr->isLeaf())
+    {
         delete targetNodePtr;
         return nullptr;
     }
@@ -243,23 +262,25 @@ inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeNode(BinaryNode<Ke
     if (targetNodePtr->getLeftPtr() != nullptr &&
         targetNodePtr->getRightPtr() == nullptr)
     {
-        BinaryNode<KeyType>* leftChild = targetNodePtr->getLeftPtr();
+        BinaryNode<KeyType> *leftChild = targetNodePtr->getLeftPtr();
         delete targetNodePtr;
         return leftChild;
     }
     if (targetNodePtr->getLeftPtr() == nullptr &&
         targetNodePtr->getRightPtr() != nullptr)
     {
-        BinaryNode<KeyType>* rightChild = targetNodePtr->getRightPtr();
+        BinaryNode<KeyType> *rightChild = targetNodePtr->getRightPtr();
         delete targetNodePtr;
         return rightChild;
     }
     // If the target node has two children, find the in-order successor
     // the smallest node in the right subtree, replace the target node's item with it,
     // and then remove the in-order successor from the right subtree
-    KeyType successorValue;
-    BinaryNode<KeyType>* newRightSubtree = _removeLeftmostNode(targetNodePtr->getRightPtr(), successorValue);
-    targetNodePtr->setItem(successorValue);
+    KeyType successorKey;
+    int succIdx;
+    BinaryNode<KeyType> *newRightSubtree = _removeLeftmostNode(targetNodePtr->getRightPtr(), successorKey, succIdx);
+    targetNodePtr->setKey(successorKey);
+    targetNodePtr->setIdx(succIdx);
     targetNodePtr->setRightPtr(newRightSubtree);
     // Return the target node pointer, which now has its item replaced
     return targetNodePtr;
@@ -270,21 +291,23 @@ inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeNode(BinaryNode<Ke
 // It returns the new subtree with the leftmost node removed and sets the successor value
 // to the item of the removed node.
 template <class KeyType>
-inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeLeftmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successor)
+inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeLeftmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successorKey, int &successorIdx)
 {
     // If the left child is null, we found the leftmost node
-    if (nodePtr->getLeftPtr() == nullptr) {
+    if (nodePtr->getLeftPtr() == nullptr)
+    {
         // Store the item of the leftmost node in successor
-        successor = nodePtr->getKey();
+        successorKey = nodePtr->getKey();
+        successorIdx = nodePtr->getIndex();
         // If the leftmost node has a right child, return it
-        BinaryNode<KeyType>* rightChild = nodePtr->getRightPtr();
+        BinaryNode<KeyType> *rightChild = nodePtr->getRightPtr();
         delete nodePtr;
         return rightChild;
     }
     // Recursively call _removeLeftmostNode on the left child
     // to find the leftmost node
     // and update the successor value
-    nodePtr->setLeftPtr(_removeLeftmostNode(nodePtr->getLeftPtr(), successor));
+    nodePtr->setLeftPtr(_removeLeftmostNode(nodePtr->getLeftPtr(), successorKey, successorIdx));
     // Return the current node pointer, which now has its left child updated
     return nodePtr;
 }
@@ -294,21 +317,24 @@ inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeLeftmostNode(Binar
 // It returns the new subtree with the rightmost node removed and sets the successor value
 // to the item of the removed node.
 template <class KeyType>
-inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeRightmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successor)
+inline BinaryNode<KeyType> *BinarySearchTree<KeyType>::_removeRightmostNode(BinaryNode<KeyType> *nodePtr, KeyType &successorKey, int &successorIdx)
 {
     // If the right child is null, we found the rightmost node
-    if (nodePtr->getRightPtr() == nullptr) {
+    if (nodePtr->getRightPtr() == nullptr)
+    {
         // Store the item of the rightmost node in successor
-        successor = nodePtr->getKey();
+        successorKey = nodePtr->getKey();
+        successorIdx = nodePtr->getIndex();
+
         // If the rightmost node has a left child, return it
-        BinaryNode<KeyType>* leftChild = nodePtr->getLeftPtr();
+        BinaryNode<KeyType> *leftChild = nodePtr->getLeftPtr();
         delete nodePtr;
         return leftChild;
     }
     // Recursively call _removeRightmostNode on the right child
     // to find the rightmost node
-    // and update the successor value 
-    nodePtr->setRightPtr(_removeRightmostNode(nodePtr->getRightPtr(), successor));
+    // and update the successor value
+    nodePtr->setRightPtr(_removeRightmostNode(nodePtr->getRightPtr(), successorKey, successorIdx));
     // Return the current node pointer, which now has its right child updated
     return nodePtr;
 }

@@ -58,6 +58,15 @@ const Creature* HashTable::search(const string& creatureID) const {
     return nullptr;
 }
 
+Creature HashTable::getCreature(const string &creatureID, const int &idx)
+{
+    for (auto& entry : table[idx]) {
+        if (entry.key == creatureID) {
+            return entry.creature;
+        }
+    }
+}
+
 // Remove implementation
 bool HashTable::remove(const string& creatureID) {
     int index = hashFunction(creatureID);

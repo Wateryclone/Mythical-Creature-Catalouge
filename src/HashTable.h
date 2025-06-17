@@ -35,6 +35,8 @@ public:
     // Search by creatureID
     const Creature* search(const string& creatureID) const;
 
+    Creature getCreature(const string& creatureID, const int& idx);
+
     // Delete by creatureID
     bool remove(const string& creatureID);
 

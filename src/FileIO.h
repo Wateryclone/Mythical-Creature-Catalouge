@@ -144,6 +144,9 @@ inline bool FileIO::insert(const Creature &c)
         return false;
     }
     int idx = hashTable->insert(c);
+    if (hashTable->loadFactor() > 0.75)
+        rehash();
+
     // only insert (key, idx) into BST
     if (bst.insert(idx, c.getCreatureID()))
     {
@@ -238,8 +241,8 @@ inline void FileIO::loadData()
         // only insert (key, idx) into BST
         bool ok = bst.insert(idx, c.getCreatureID());
         // If load factor > 0.75, rehash is required
-        // if (hashTable->loadFactor() > 0.75)
-        //     rehash();
+        if (hashTable->loadFactor() > 0.75)
+            rehash();
 
         // For debugging
         // if ( idx > -1 && ok )
@@ -278,7 +281,7 @@ inline void FileIO::rehash()
     // traverse old table and re-insert each item
     for (const Creature &c : hashTable->getAllCreatures())
     {
-        newTable->insert(c);
+        bst.setIndex(c.getCreatureID(), newTable->insert(c));
     }
     delete hashTable;
     hashTable = newTable;

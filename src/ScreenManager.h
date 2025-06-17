@@ -6,6 +6,8 @@
 #include <cctype>
 #include <stack>
 
+#include "FileIO.h"
+
 using namespace std;
 
 #include "Creature.h"
@@ -13,12 +15,12 @@ using namespace std;
 #include "HashTable.h"
 
 void printWelcome();
-int buildDataStructure( const string &filename, BinarySearchTree<string> &bst, HashTable &hashTable );
-void searchManager(const HashTable &hashTable);
-void insertManager(BinarySearchTree<string> &bst, HashTable &hashTable);
-void deleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk);
-void undoDeleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk);
-void statisticsManager(const HashTable &hashTable);
+// int buildDataStructure(const string &filename, BinarySearchTree<string> &bst, HashTable &hashTable);
+// void searchManager(const HashTable &hashTable);
+// void insertManager(BinarySearchTree<string> &bst, HashTable &hashTable);
+// void deleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk);
+// void undoDeleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk);
+// void statisticsManager(const HashTable &hashTable);
 void iDisplay(const string &item, int level);
 void hDisplay(const string &item);
 
@@ -37,80 +39,32 @@ void printWelcome()
     cout << indentation << "[W] - Write to file" << endl;
     cout << indentation << "[H] - Help" << endl;
     cout << indentation << "[Q] - Quit" << endl;
-
 }
 
-int buildDataStructure( const string &filename, BinarySearchTree<string> &bst, HashTable &hashTable )
+int buildDataStructure(const string &filename, FileIO &file)
 {
-    ifstream fin(filename);
     cout << "Reading data from \"" << filename << "...\"" << endl;
-
-    if(!fin)
+    bool ok = file.init(filename);
+    if (!ok)
     {
-        cout << "Error opening the input file: \""<< filename << "\"" << endl;
+        cout << "Error opening the input file: \"" << filename << "\"" << endl;
         return -1;
     }
-
-    string line;
-    while (getline(fin, line))
-    {
-        string creatureID; // Primary key eg. "FNKS-BD"
-        string name; // eg. "Phoenix"
-        string category; // eg. "Bird"
-        string history; // famous legend or myth associated with the creature 
-                //eg."A mythical bird that cyclically regenerates or is reborn from its ashes, known in Greek, Egyptian, and Persian traditions."
-        string habitat; // eg. "Deserts and mountains"
-        string description; // eg. "Fiery bird with radiant plumage, capable of resurrection through immolation and rebirth."
-        int releventYear; // year of first mention in history
-        
-        stringstream temp(line);   // create temp with data from line
-
-        getline(temp, creatureID, ';');        // read from temp
-        getline(temp, name, ';');  // stop reading at ';'
-        getline(temp, category, ';');  // stop reading at ';'
-        getline(temp, history, ';');  // stop reading at ';'
-        getline(temp, habitat, ';');  // stop reading at ';'
-        getline(temp, description , ';');  // stop reading at ';'    
-        temp >> releventYear;  // stop reading at ';'
-
-        // create a Creature object and initialize it with data from file
-        Creature aCreature(creatureID, name, category, history, habitat, description, releventYear);
-
-        // For debugging
-        // aCreature.vPrintCreature();
-        
-        int ind = hashTable.insert(aCreature);
-        bool resInsert = bst.insert(ind, aCreature.getCreatureID());
-
-        // For debugging
-        // if ( ind > -1 && resInsert ) 
-        //     cout << aCreature.getCreatureID() << " is inserted successfully." << endl;
-        // else
-        //     cout << aCreature.getCreatureID() << " is NOT inserted." << endl;
-        
-    }
-
-    // For debugging
-    // cout << "====== Built HashTable =====" << endl;
-    // hashTable.printTable();    
-    // cout << "====== Built BST =====" << endl;
-    // bst.printTree(iDisplay);
-
     return 1;
-
 }
 
-void searchManager(const HashTable &hashTable)
+void searchManager(FileIO &file)
 {
     cout << "Please enter a creature ID: ";
     string targetID;
     getline(cin, targetID);
 
-    const Creature* returnCreature = hashTable.search(targetID);
-    if (returnCreature != nullptr)
+    bool found = file.search(targetID);
+    if (found)
     {
-        cout << "\nFound the creature \"" << targetID << "\":" << endl << endl;
-        returnCreature->vPrintCreature();
+        cout << "\nFound the creature \"" << targetID << "\":" << endl
+             << endl;
+        file.getCreature(targetID).vPrintCreature();
     }
     else
     {
@@ -118,19 +72,25 @@ void searchManager(const HashTable &hashTable)
     }
 }
 
-void insertManager(BinarySearchTree<string> &bst, HashTable &hashTable)
+void insertManager(FileIO &file)
 {
-    string creatureID; // Primary key eg. "FNKS-BD"
-    string name; // eg. "Phoenix"
-    string category; // eg. "Bird"
-    string history; // famous legend or myth associated with the creature 
-            //eg."A mythical bird that cyclically regenerates or is reborn from its ashes, known in Greek, Egyptian, and Persian traditions."
-    string habitat; // eg. "Deserts and mountains"
+    string creatureID;  // Primary key eg. "FNKS-BD"
+    string name;        // eg. "Phoenix"
+    string category;    // eg. "Bird"
+    string history;     // famous legend or myth associated with the creature
+                        // eg."A mythical bird that cyclically regenerates or is reborn from its ashes, known in Greek, Egyptian, and Persian traditions."
+    string habitat;     // eg. "Deserts and mountains"
     string description; // eg. "Fiery bird with radiant plumage, capable of resurrection through immolation and rebirth."
-    int releventYear; // year of first mention in history
-    
+    int releventYear;   // year of first mention in history
+
     cout << "Please enter a creature ID: ";
     getline(cin, creatureID);
+    while (file.search(creatureID))
+    {
+        cout << "\"" + creatureID + "\" already exists!" << endl;
+        cout << "Please re-enter: ";
+        getline(cin, creatureID);
+    }
 
     cout << "Please enter a creature name: ";
     getline(cin, name);
@@ -154,10 +114,7 @@ void insertManager(BinarySearchTree<string> &bst, HashTable &hashTable)
 
     Creature newCreature(creatureID, name, category, history, habitat, description, releventYear);
 
-    int ind = hashTable.insert(newCreature);
-    bool resInsert = bst.insert(ind, newCreature.getCreatureID());
-
-    if ( resInsert )
+    if (file.insert(newCreature))
     {
         cout << "New creature " << creatureID << " was inserted!" << endl;
     }
@@ -166,38 +123,40 @@ void insertManager(BinarySearchTree<string> &bst, HashTable &hashTable)
         cout << "Cannot insert creature: " << creatureID << endl;
         cout << "It might exist in the database already!" << endl;
     }
-
 }
 
-void deleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk)
+void deleteManager(FileIO &file, stack<Creature> &stk)
 {
     cout << "Please enter a creature ID to delete: ";
     string targetID;
     getline(cin, targetID);
 
     Creature temp;
-    const Creature* returnCreature = hashTable.search(targetID);
-    if (returnCreature == nullptr)
+    // const Creature *returnCreature = hashTable.search(targetID);
+    Creature returnCreature;
+    if (file.search(targetID))
+    {
+        returnCreature = file.getCreature(targetID);
+    }
+    else
     {
         cout << "Creature " << targetID << "does NOT exist!" << endl;
         return;
     }
-    else
-    {
-        temp.setCreatureID(returnCreature->getCreatureID());
-        temp.setName(returnCreature->getName());
-        temp.setHistory(returnCreature->getHistory());
-        temp.setCategory(returnCreature->getCategory());
-        temp.setHabitat(returnCreature->getHabitat());
-        temp.setDescription(returnCreature->getDescription());
-        temp.setReleventYear(returnCreature->getReleventYear());
 
-        stk.push(temp);
-    }
+    temp = returnCreature;
 
-    bool resBST = bst.remove(targetID);
-    bool resHashTable = hashTable.remove(targetID);
-    if (resBST and resHashTable)
+    // temp.setCreatureID(returnCreature->getCreatureID());
+    // temp.setName(returnCreature->getName());
+    // temp.setHistory(returnCreature->getHistory());
+    // temp.setCategory(returnCreature->getCategory());
+    // temp.setHabitat(returnCreature->getHabitat());
+    // temp.setDescription(returnCreature->getDescription());
+    // temp.setReleventYear(returnCreature->getReleventYear());
+
+    stk.push(temp);
+
+    if (file.del(targetID))
     {
         cout << "Creature " << targetID << " was successfully deleted!" << endl;
         // For debugging
@@ -206,16 +165,15 @@ void deleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Cr
     else
     {
         cout << "CANNOT delete creature " << targetID << "!" << endl;
-        // insert back if delete failed
-        int ind = hashTable.insert(temp); // no operation if duplicated
-        bool resInsert = bst.insert(ind, temp.getCreatureID());
-            
+        // // insert back if delete failed
+        // int ind = hashTable.insert(temp); // no operation if duplicated
+        // bool resInsert = bst.insert(ind, temp.getCreatureID());
     }
 }
 
-void undoDeleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk)
+void undoDeleteManager(FileIO &file, stack<Creature> &stk)
 {
-    if ( stk.empty() )
+    if (stk.empty())
     {
         cout << "Undo delete impossible!" << endl;
     }
@@ -223,31 +181,28 @@ void undoDeleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stac
     {
         Creature temp = stk.top();
 
-        int ind = hashTable.insert(temp);
-        bool resInsert = bst.insert(ind, temp.getCreatureID());
-
-        if (resInsert)
+        if (file.insert(temp))
         {
             cout << "Undo delete succeeded!" << endl;
             stk.pop();
-            //For debugging
+            // For debugging
             cout << "There are " << stk.size() << " elements in stack." << endl;
         }
         else
         {
             cout << "CANNOT undo delete!" << endl;
         }
-
     }
 }
 
-void statisticsManager(const HashTable &hashTable)
+void statisticsManager(FileIO &file)
 {
     cout << "===== Statistics in HashTable =====\n";
-    cout << "Number of data: " << hashTable.getSize() << endl;
-    cout << "Load factor: " << hashTable.loadFactor() << endl;
-    cout << "Longest chain in hash table: " << hashTable.getLongestChain() << endl;
-    cout << "Empty buckets: " << hashTable.getEmptyBuckets() << endl << endl; 
+    cout << "Number of data: " << file.getHashTableSize() << endl;
+    cout << "Load factor: " << file.getHashTableloadFactor() << endl;
+    cout << "Longest chain in hash table: " << file.getHashTableLongestChain() << endl;
+    cout << "Empty buckets: " << file.getHashTableEmptyBuckets() << endl;
+    cout << endl;
 }
 
 void iDisplay(const string &item, int level)
@@ -255,7 +210,6 @@ void iDisplay(const string &item, int level)
     for (int i = 1; i < level; i++)
         cout << "..";
     cout << level << "). " << item << endl;
-    
 }
 
 void hDisplay(const string &item)

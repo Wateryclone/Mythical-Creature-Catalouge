@@ -42,12 +42,16 @@ int main()
         // If the file is not open
         if (!ok)
         {
-            if (cmd == "H")
+            switch (cmd[0])
             {
+            case 'H':
+                {
                 printWelcome();
-            }
-            else if (cmd == "L")
-            {
+                break;
+                }
+                
+            case 'L':
+                {
                 cout << "What is the input file's name? Press Enter for Default \"Creatures.txt\": ";
                 getline(cin, filename);
 
@@ -65,27 +69,36 @@ int main()
                 {
                     cout << "File " << filename << " was successfully loaded!" << endl;
                 }
-            }
-            else if (cmd == "Q")
-            {
+                break;
+                }
+
+            case 'Q':
+                {
                 cout << "Thank you for visiting!" << endl;
                 return 0;
-            }
-            else
-            {
+                }
+            
+            default:
+                {
                 cout << "Invalid command " << cmd << endl;
                 printWelcome();
+                break;
+                }
             }
         }
+
         // If the file is open
         else
         {
-            if (cmd == "H")
+            switch(cmd[0])
             {
+            case 'H':
+                {
                 printWelcome();
-            }
-            else if (cmd == "L")
-            {
+                break;
+                }
+            case 'L':
+                {
                 cout << "What is the input file's name? Press Enter for Default Creatures.txt ";
                 getline(cin, filename);
 
@@ -103,29 +116,38 @@ int main()
                 {
                     cout << "File " << filename << " was successfully loaded!" << endl;
                 }
+                break;
+                }
+            case 'S':
+                {
+                    cout << "===== Searching =====" << endl;
+                    searchManager(file);
+                
+                break;
             }
-            else if (cmd == "S")
-            {
-                cout << "===== Searching =====" << endl;
-                searchManager(file);
-            }
-            else if (cmd == "A")
-            {
-                cout << "===== Adding a new creature =====" << endl;
-                insertManager(file);
-            }
-            else if (cmd == "D")
-            {
-                cout << "===== Deleting a creature =====" << endl;
-                deleteManager(file, stk);
-            }
-            else if (cmd == "U")
-            {
-                cout << "===== Undo deleting =====" << endl;
-                undoDeleteManager(file, stk);
-            }
-            else if (cmd == "P")
-            {
+            case 'A':
+                {
+                    cout << "===== Adding a new creature =====" << endl;
+                    insertManager(file);
+                    break;
+                }
+
+            case 'D':
+                {
+                    cout << "===== Deleting a creature =====" << endl;
+                    deleteManager(file, stk);
+                
+                break;
+                }
+            case 'U':
+                {
+                    cout << "===== Undo deleting =====" << endl;
+                    undoDeleteManager(file, stk);
+                    break;
+                }
+
+            case 'P':
+                {
                 cout << "===== All stored data in order =====" << endl;
                 file.inOrder(hDisplay);
                 cout << endl;
@@ -133,13 +155,17 @@ int main()
                 // For debugging: hidden indented tree
                 // cout << "\n===== BST indented tree ===== " << endl;
                 // bst.printTree(iDisplay);
-            }
-            else if (cmd == "T")
-            {
-                statisticsManager(file);
-            }
-            else if (cmd == "W")
-            {
+                break;
+                }
+            case 'T':
+                {
+                    statisticsManager(file);
+                
+                break;
+                }
+
+            case 'W':
+                {
                 cout << "===== Saving data to file: ";
                 string outputFileName;
                 getline(cin, outputFileName);
@@ -155,18 +181,25 @@ int main()
                     stk.pop();
                 }
                 assert(stk.empty());
-            }
-            else if (cmd == "Q")
-            {
+                break;
+                }
+
+            case 'Q':
+                {
                 cout << "Thank you for visiting!" << endl;
                 return 0;
-            }
-            else
-            {
+                }
+
+            default:
+                {
                 cout << "Invalid command " << cmd << endl;
                 printWelcome();
-            }
+                break;
+                }
+
         }
+    }
+
 
         cout << "\nUser command: ";
         getline(cin, cmd);

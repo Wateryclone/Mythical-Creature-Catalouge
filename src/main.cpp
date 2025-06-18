@@ -32,15 +32,15 @@ int main()
 
     while (true)
     {
-        bool ok = file.is_ready();
-        if (!ok)
-            cout << BOLD << RED << "\nWarning: " << RESET << "Data file not loaded. All commands except for loading file are currently unavailable.\n"
-                << endl;
-
         for (char &c : cmd)
         {
             c = toupper(static_cast<unsigned char>(c));
         }
+
+        bool ok = file.is_ready();
+        if (!ok && (cmd[0] != 'Q'))
+            cout << BOLD << RED << "\nWarning: " << RESET << "Data file not loaded. All commands except for loading file are currently unavailable.\n"
+                << endl;
 
         // If the file is not open
         if (!ok)

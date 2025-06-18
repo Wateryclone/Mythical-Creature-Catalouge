@@ -16,9 +16,9 @@ private:
 
 public:
     // constructors
-    BinaryNode(const int &ind, const KeyType &k)
+    BinaryNode(const int &idx, const KeyType &k)
     {
-        index = ind;
+        index = idx;
         key = k;
         leftPtr = nullptr;
         rightPtr = nullptr;
@@ -31,7 +31,7 @@ public:
     }
     // setters
     void setIdx(const int &index) {this->index = index; }
-    void setKey(const KeyType &anItem) { key = anItem; }
+    void setKey(const KeyType &key) { this->key = key; }
     void setLeftPtr(BinaryNode<KeyType> *left) { leftPtr = left; }
     void setRightPtr(BinaryNode<KeyType> *right) { rightPtr = right; }
 

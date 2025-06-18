@@ -55,23 +55,25 @@ int main()
 
             case 'L':
             {
+                int loadSuc = -1;
                 cout << BOLD << CYAN << "What is the input file's name? Press Enter for Default " << BOLD << YELLOW << "\"Creatures.txt\"" << BOLD << CYAN << ": " << RESET;
-                getline(cin, filename);
-
-                if (filename.empty())
+                do{
+                    getline(cin, filename);
+                    if (filename.empty())
                     filename = "Creatures.txt";
 
-                int loadSuc = buildDataStructure(filename, file);
+                    loadSuc = buildDataStructure(filename, file);
 
-                if (loadSuc == -1)
-                {
-                    cout << BOLD << CYAN << "Reenter your data file..." << RESET << endl;
-                    cmd = "L";
-                }
-                else
-                {
-                    cout << BOLD << GREEN << "File " << BOLD << YELLOW << filename << BOLD << GREEN << " was successfully loaded!" << RESET << endl;
-                }
+                    if (loadSuc == -1)
+                    {
+                        cout << BOLD << CYAN << "Reenter your data file or leave blank for default..." << RESET << endl;
+                    }
+                    else
+                    {
+                        cout << BOLD << GREEN << "File " << BOLD << YELLOW << filename << BOLD << GREEN << " was successfully loaded!" << RESET << endl;
+                    }
+
+                }while(loadSuc == -1);
                 break;
             }
 

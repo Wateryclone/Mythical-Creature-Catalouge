@@ -44,7 +44,7 @@ public:
     void printLeaf(void visit(const KeyType &)) const { _printLeaf(visit, rootPtr); }
 
     // abstract functions to be implemented by derived class
-    virtual bool insert(const int &ind, const KeyType &newData) = 0;
+    virtual bool insert(const int &idx, const KeyType &newData) = 0;
     // virtual bool remove(const KeyType &data) = 0;
     virtual bool search(const KeyType &target, int &returnedItem) const = 0;
 

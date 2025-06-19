@@ -53,6 +53,8 @@ Call BST printTree() function to print indented tree (wiht primary key for store
 
 I am student-3 in our group. I am in charge of the Binary Search Tree and File I/O modules. Specifically, I implemented the core BST data structure (for indexing creature IDs) and a `FileIO` class (for loading, managing, and persisting creature data). Below is a summary of my contributions.
 
+## Binary Search Tree
+
 **BinaryNode Class**:
 
 Defines the node type for the BST, storing a `key` (creature ID) and an `index` (position in the hash table), as well as pointers to left and right children.
@@ -80,6 +82,8 @@ Allows updating the stored index for a given key, used during hash-table rehashi
 **printTree (BST)**:
 
 Inherited from `BinaryTree`, this method prints the tree as an indented list of keys with their levels, used for debugging and display.
+
+## File I/O
 
 **init (FileIO)**:
 

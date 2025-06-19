@@ -1,5 +1,22 @@
-# Screen Manager: Ye Zhang
+ # ███╗   ███╗██╗   ██╗████████╗██╗  ██╗█████████╗ ██████╗ ██████╗██╗    
+ # ████╗ ████║╚██╗ ██╔╝╚══██╔══╝██║  ██║╚══██╔═══╝██╔════╝██╔══██╗██║     
+ # ██╔████╔██║ ╚████╔╝    ██║   ███████║   ██║    ██║     ███████║██║     
+ # ██║╚██╔╝██║  ╚██╔╝     ██║   ██╔══██║   ██║    ██║     ██╔══██║██║     
+ # ██║ ╚═╝ ██║   ██║      ██║   ██║  ██║████████╗ ╚██████╗██║  ██║███████╗
+ # ╚═╝     ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝╚═══════╝  ╚═════╝╚═╝  ╚═╝╚══════╝
 
+ #  ██████╗██████╗ ███████╗ ██████╗████████╗██╗   ██╗██████╗ ███████╗███████╗
+ # ██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██║   ██║██╔══██╗██╔════╝██╔════╝
+ # ██║     ██████╔╝█████╗  ███████║   ██║   ██║   ██║██████╔╝█████╗  ███████╗
+ # ██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██║   ██║██╔══██╗██╔══╝  ╚════██║
+ # ╚██████╗██║  ██║███████╗██║  ██║   ██║   ╚██████╔╝██║  ██║███████╗███████║
+ #  ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝
+
+
+![MainMenu](https://file.ksy8126.com/SC_Menu.png)
+
+
+# Screen Manager: Ye Zhang
 
 I am student-4 in our group. I am in charge of the screen output manager. Specifically, I implemented (further cordinated by others) printWelcom (i.e., menuPrompt), buildDataStructure, insertManager, searchManager, deleteManager, undoDeleteManager, statisticsManager, print options (iDisplay, hDisplay, vPrintCreature() in hashtable).
 

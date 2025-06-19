@@ -196,7 +196,7 @@ int main()
                 cout << BOLD << GREEN << "Print indented tree!" << RESET << endl;
                 cout << "\n===== BST indented tree ===== " << endl;
                 file.indentedTree(iDisplay);
-                return 0;
+                break;
             }
 
             default:

@@ -156,10 +156,6 @@ int main()
                 cout << BOLD << CYAN << "=========== All stored data in order ===========" << RESET << endl;
                 file.inOrder(hDisplay);
                 cout << endl;
-
-                // For debugging: hidden indented tree
-                // cout << "\n===== BST indented tree ===== " << endl;
-                // bst.printTree(iDisplay);
                 break;
             }
             case 'T':
@@ -192,6 +188,14 @@ int main()
             case 'Q':
             {
                 cout << BOLD << GREEN << "Thank you for visiting!" << RESET << endl;
+                return 0;
+            }
+
+            case 'N':
+            {
+                cout << BOLD << GREEN << "Print indented tree!" << RESET << endl;
+                cout << "\n===== BST indented tree ===== " << endl;
+                file.indentedTree(iDisplay);
                 return 0;
             }
 

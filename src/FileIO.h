@@ -61,6 +61,8 @@ public:
     // Save hash‐table contents in table order back to a file
     void saveData(const std::string &outFilename) const;
 
+    void indentedTree(void visit(const string &item, int level));
+
 private:
     std::string fileName;
     std::ifstream inFile;
@@ -312,5 +314,10 @@ inline int FileIO::nextPrime(int n)
     }
     return n;
 }
+
+inline void FileIO::indentedTree(void visit(const string &item, int level)) 
+{
+    bst.printTree(visit);
+};
 
 #endif // FILEIO_H

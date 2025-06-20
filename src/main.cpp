@@ -17,7 +17,6 @@ using namespace Color;
 
 int main()
 {
-
     string filename = "Creatures.txt";
     string cmd;
     // BinarySearchTree<string> bst;

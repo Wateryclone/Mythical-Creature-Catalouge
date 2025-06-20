@@ -1,3 +1,5 @@
+<h1 align="center">Mythical-Creature-Catalouge</h1>
+
  ```text
 ███╗   ███╗██╗   ██╗████████╗██╗  ██╗█████████╗ ██████╗ ██████╗██╗    
 ████╗ ████║╚██╗ ██╔╝╚══██╔══╝██║  ██║╚══██╔═══╝██╔════╝██╔══██╗██║     
@@ -13,8 +15,16 @@
   ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝
 ```
 
-![MainMenu](https://file.ksy8126.com/SC_Menu.png)
+## Team Member:
+```
+1 - Zachary Rudin
+2 - Leyan Pan
+3 - Shunyao Jin
+4 - Ye Zhang
+```
 
+# Menu Screenshot
+![Menu Screenshot](https://file.ksy8126.com/SC_Menu.png)
 
 # Screen Manager: Ye Zhang
 

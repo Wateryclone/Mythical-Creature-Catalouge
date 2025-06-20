@@ -103,7 +103,7 @@ void HashTable::rehash() {
         }
     }
 
-    table = move(newTable);
+    table = std::move(newTable);
     capacity = newCapacity;
 }
 

@@ -65,6 +65,9 @@ Creature HashTable::getCreature(const string &creatureID, const int &idx)
             return entry.creature;
         }
     }
+    
+    // Return dummy creature
+    return Creature();
 }
 
 // Remove implementation

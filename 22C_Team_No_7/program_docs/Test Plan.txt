@@ -1,0 +1,27 @@
+l
+Creatures.txt
+T
+P
+s
+BGFT-HM
+A
+BGFT-HM
+AAAA-AA
+test
+test
+test
+test test
+test test
+0
+T
+D
+KTSN-SP
+s
+KTSN-SP
+u
+s
+KTSN-SP
+w
+Output file
+n
+q

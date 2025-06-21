@@ -1,0 +1,139 @@
+Warning: Data file not loaded. All commands except for loading file are currently unavailable.
+
+Main Menu:
+  [L] - Load data file
+  [A] - Add data
+  [S] - Search data (Primary key: creature_id)
+  [D] - Delete data
+  [U] - Undo delete
+  [P] - Print data
+  [T] - Show statistics
+  [W] - Write to file
+  [H] - Help
+  [Q] - Quit
+User command: l
+
+Warning: Data file not loaded. All commands except for loading file are currently unavailable.
+
+What is the input file's name? Press Enter for Default "Creatures.txt": Creatures.txt
+Reading data from "Creatures.txt..."
+File Creatures.txt was successfully loaded!
+
+User command: T
+=========== Statistics in HashTable ===========
+Number of data: 31
+Load factor: 0.462687
+Longest chain in hash table: 2
+Empty buckets: 42
+
+
+User command: p
+=========== All stored data in order ===========
+(BGFT-HM) (BNSH-SP) (BSLSK-RE) (CHPC-CR) (CRBR-HT) (DJNN-SP) (FFNR-DR) (FNKS-BD) (FNRT-WF) (HYDR-RE) (JMNG-SR) (KLP-MR) (KRKN-OC) (KTSN-SP) (LNMS-CR) (LVTH-BST) (MNTC-BT) (MNTR-MN) (NIAN-BST) (PXIE-SP) (QTZL-CS) (ROC-PR) (SLKI-MR) (SPHX-MN) (THNB-BD) (TRSG-GB) (WNDB-HM) (XMR-CE) (YLCT-FX) (YNCR-UN) (YTI-HM) 
+
+User command: s
+=========== Searching ===========
+Please enter a creature ID: BGFT-HM
+
+Found the creature "BGFT-HM":
+
+Creature ID: BGFT-HM
+Name:  Bigfoot
+Category:  Cryptid
+History:  North American folklore first termed ΓÇ£BigfootΓÇ¥ in 1958, earlier indigenous stories but modern reports begin mid-20thΓÇ»century.
+Habitat:  Pacific Northwest forests
+Description:  Large bipedal hairy humanoid, elusive, footprints but scarce physical evidence.
+Year: 1958
+
+User command: A
+=========== Adding a new creature ===========
+Please enter a creature ID: BGFT-HM
+"BGFT-HM" already exists!
+Please re-enter: AAAA-AA
+Please enter a creature name: test
+Please enter a creature category: test
+Please enter a creature history: test
+Please enter a creature habitat: test test
+Please enter a creature description: test test
+Please enter a creature year: 0
+New creature AAAA-AA was inserted!
+
+User command: T
+=========== Statistics in HashTable ===========
+Number of data: 32
+Load factor: 0.477612
+Longest chain in hash table: 3
+Empty buckets: 42
+
+
+User command: D
+=========== Deleting a creature ===========
+Please enter a creature ID to delete: KTSN-SP
+Creature KTSN-SP was successfully deleted!
+
+User command: s
+=========== Searching ===========
+Please enter a creature ID: KTSN-SP
+Creature "KTSN-SP" - not found
+
+User command: u
+=========== Undo deleting ===========
+Undo delete succeeded!
+
+User command: s
+=========== Searching ===========
+Please enter a creature ID: KTSN-SP
+
+Found the creature "KTSN-SP":
+
+Creature ID: KTSN-SP
+Name:  Kitsune
+Category:  Spirit
+History:  Japanese fox spirit with shapeshifting and trickster aspects, mentioned in Heian-era texts.
+Habitat:  Forests and human settlements in Japan
+Description:  Fox with multiple tails, intelligent, capable of illusion and possession.
+Year: 700
+
+User command: w
+Saving data to file: Output file
+Data is saved in "Output file.txt"
+
+User command: n
+Print indented tree!
+
+===== BST indented tree =====
+1). FNKS-BD
+..2). BSLSK-RE
+....3). BGFT-HM
+......4). AAAA-AA
+......4). BNSH-SP
+....3). FFNR-DR
+......4). DJNN-SP
+........5). CRBR-HT
+..........6). CHPC-CR
+..2). KRKN-OC
+....3). JMNG-SR
+......4). FNRT-WF
+........5). HYDR-RE
+......4). KLP-MR
+....3). XMR-CE
+......4). QTZL-CS
+........5). NIAN-BST
+..........6). MNTR-MN
+............7). MNTC-BT
+..............8). LNMS-CR
+................9). KTSN-SP
+................9). LVTH-BST
+..........6). PXIE-SP
+........5). THNB-BD
+..........6). ROC-PR
+............7). SLKI-MR
+..............8). SPHX-MN
+..........6). WNDB-HM
+............7). TRSG-GB
+......4). YTI-HM
+........5). YNCR-UN
+..........6). YLCT-FX
+
+User command: q
+Thank you for visiting!

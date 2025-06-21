@@ -22,15 +22,47 @@
 3 - Shunyao Jin
 4 - Ye Zhang
 ```
+# Introduction
+
+This project creates a catalouge of mythical creatures for the user to browse and add entries to. this is done though the implementation of both a BST and a hash function working in junction to quickly search though the database, undoing a deletion is possible with the use of a stack. all while having a pleasing coloured interface.
 
 # Menu Screenshot
 ![Menu Screenshot](https://file.ksy8126.com/SC_Menu.png)
 
+# Hash function
+
+```C++
+int HashTable::hashFunction(const string& key) const {
+    unsigned long hash = 5381;
+    for (char c : key) {
+        hash = ((hash << 5) + hash) + c; // hash * 33 + c
+    }
+    return hash % capacity;
+} 
+```
+
+# Presentation with diagrams
+
+![Mythical Creature Catalouge](https://github.com/Wateryclone/Mythical-Creature-Catalouge/blob/main/Mythical%20Creature%20Catalog.pptx)
+
+# Collision Resolution
+
+each bucket contains a linked list chaining method this can be seen in the hash table insert:
+```C++
+  // Check for duplicates
+  for (auto& entry : table[index]) {
+      if (entry.key == key) {
+          entry.creature = creature; // Update existing
+          return index;
+      }
+  }
+```
+
 # Screen Manager: Ye Zhang
 
-I am student-4 in our group. I am in charge of the screen output manager. Specifically, I implemented (further cordinated by others) printWelcom (i.e., menuPrompt), buildDataStructure, insertManager, searchManager, deleteManager, undoDeleteManager, statisticsManager, print options (iDisplay, hDisplay, vPrintCreature() in hashtable).
+I am student-4 in our group. I am in charge of the screen output manager. Specifically, I implemented (further coordinated by others) printwelcome (i.e., menuPrompt), buildDataStructure, insertManager, searchManager, deleteManager, undoDeleteManager, statisticsManager, print options (iDisplay, hDisplay, vPrintCreature() in hashtable).
 
-**printWelcom (i.e., menuPrompt)**: 
+**printWelcome (i.e., menuPrompt)**: 
 
 the main menu for user to option, including 
 ```
@@ -54,7 +86,7 @@ Load data from a file (one data per line). Read each line and insert to HashTabl
 
 **insertManager**
 
-The main logic of insert an item is the same as *buildDataStructure*, the only difference is this is for manually input a new item with required features (e.g., creature_id, name, history...). If the input key is aleady in our database, then prompt to user to re-enter the new item.
+The main logic of insert an item is the same as *buildDataStructure*, the only difference is this is for manually input a new item with required features (e.g., creature_id, name, history...). If the input key is already in our database, then prompt to user to re-enter the new item.
 
 **searchManager**
 
@@ -62,19 +94,19 @@ Search an item by an input primary key (i.e., creature_id). If found, display th
 
 **deleteManager**
 
-First search if the item to delete is in our datastructure. If yes, remove the item from HashTable and BST, otherwise "CANNOT delete creature ###"
+First search if the item to delete is in our data structure. If yes, remove the item from HashTable and BST, otherwise "CANNOT delete creature ###"
 
 **undoDeleteManager**
 
-Use a stack to temporarly store the item after delete. When user aims to undo delete, pop the top item in the stack and re-insert to our database. This function allow users undo delete continuously until all deleted items are poped (i.e., stack is empty). Note that when user write the data (with potential munipulations), this stack is clearned which means user cannot undo delete (prompt to user).
+Use a stack to temporally store the item after delete. When user aims to undo delete, pop the top item in the stack and re-insert to our database. This function allow users undo delete continuously until all deleted items are poped (i.e., stack is empty). Note that when user write the data (with potential manipulations), this stack is cleared which means user cannot undo delete (prompt to user).
 
 **statisticsManager**
 
-Call HashTable function to get statistics, e.g., load factore, longest chain (hash key collision), empty bucket, and etc..
+Call HashTable function to get statistics, e.g., load factor, longest chain (hash key collision), empty bucket, and etc..
 
 **[hidden] indentedTree**
 
-Call BST printTree() function to print indented tree (wiht primary key for stored data). This is a hidden option.
+Call BST printTree() function to print indented tree (with primary key for stored data). This is a hidden option.
 
 # Binary Search Tree & File I/O: Shunyao Jin
 
@@ -175,3 +207,20 @@ Implements dynamic resizing: when `hashTable.loadFactor()` > 0.75, `rehash` allo
 **setFileName & Destructor (FileIO)**:
 
 Allows changing the target filename and ensures proper cleanup of `hashTable` and file streams.
+
+
+# Lead: Zachary Rudin
+
+I'm technically group member #1 in our group because I switched from #3 to become group lead. I mainly worked on the main and the collaboration tools we used which were fundamental to the workflow we established. I also worked on main, although I would have liked to do more. I mainly worked on things like the presentation slide and the dataset
+
+**Main Changes**:
+
+The original Main was a list of else if statements and I made it a switch statement. I also reworked the filename input handling to use a while loop.
+
+**Dataset of Mythical Creatures**:
+
+I think I spent hours creating a decent list of 25+ creatures, the data is mainly taken from wikipedia and I tried to not just make things up.
+
+**Presentation Slide**:
+
+Our group wasn't really on top of this so it really came down to the last minute but I did spend a good amount of time rushing the thing together, Shunyao was the one making the diagrams though. I think we made a good team.

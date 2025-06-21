@@ -321,6 +321,7 @@ inline void FileIO::indentedTree(void visit(const string &item, int level))
 {
     bst.printTree(visit);
 }
+
 inline void FileIO::visitNames(void visit(const string &name)) {
     for (Creature &c : this->hashTable->getAllCreatures()) {
         visit(c.getName());

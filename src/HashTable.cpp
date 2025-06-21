@@ -1,4 +1,4 @@
-#include "hashtable.h"
+#include "HashTable.h"
 #include <algorithm>
 #include <iostream>
 
@@ -65,6 +65,9 @@ Creature HashTable::getCreature(const string &creatureID, const int &idx)
             return entry.creature;
         }
     }
+    
+    // Return dummy creature
+    return Creature();
 }
 
 // Remove implementation
@@ -103,7 +106,7 @@ void HashTable::rehash() {
         }
     }
 
-    table = move(newTable);
+    table = std::move(newTable);
     capacity = newCapacity;
 }
 

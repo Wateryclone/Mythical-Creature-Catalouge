@@ -14,6 +14,9 @@ using namespace std;
 #include "BinarySearchTree.h"
 #include "HashTable.h"
 
+// External declaration of global FileIO defined in main
+extern FileIO* globalFileIO;
+
 namespace Color {
     constexpr const char* RESET   = "\033[0m";
     constexpr const char* RED     = "\033[31m";
@@ -35,6 +38,7 @@ void printWelcome();
 // void undoDeleteManager(BinarySearchTree<string> &bst, HashTable &hashTable, stack<Creature> &stk);
 // void statisticsManager(const HashTable &hashTable);
 void iDisplay(const string &item, int level);
+void _hDisplay(const string &item, FileIO &file);
 void hDisplay(const string &item);
 
 void printWelcome()
@@ -225,5 +229,14 @@ void iDisplay(const string &item, int level)
 
 void hDisplay(const string &item)
 {
-    cout << BOLD << BLUE << "(" << BOLD << YELLOW << item << BOLD << BLUE << ") " << RESET ;
+    if (globalFileIO != nullptr)
+    {
+        _hDisplay(item, *globalFileIO);
+    }
+}
+
+void _hDisplay(const string &item, FileIO &file)
+{
+    cout << BOLD << YELLOW << item << BOLD << BLUE << " | " 
+         << BOLD << CYAN << file.getCreature(item).getName() << RESET << endl;
 }

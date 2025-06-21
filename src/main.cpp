@@ -12,6 +12,8 @@
 #include "Creature.h"
 #include "ScreenManager.h"
 
+FileIO* globalFileIO = nullptr;
+
 using namespace std;
 using namespace Color;
 
@@ -153,7 +155,9 @@ int main()
             case 'P':
             {
                 cout << BOLD << CYAN << "=========== All stored data in order ===========" << RESET << endl;
+                globalFileIO = &file;
                 file.inOrder(hDisplay);
+                globalFileIO = nullptr;
                 cout << endl;
                 break;
             }

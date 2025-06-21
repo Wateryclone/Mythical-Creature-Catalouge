@@ -43,7 +43,7 @@ int HashTable::hashFunction(const string& key) const {
 
 # Presentation with diagrams
 
-![Mythical Creature Catalouge](https://github.com/Wateryclone/Mythical-Creature-Catalouge/blob/main/Mythical%20Creature%20Catalog.pptx)
+[Mythical Creature Catalouge](./Mythical%20Creature%20Catalog.pdf)
 
 # Collision Resolution
 

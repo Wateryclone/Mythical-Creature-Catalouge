@@ -10,3 +10,6 @@ file(GLOB SOURCE_FILES "src/*.cpp")
 add_executable(out ${SOURCE_FILES})
 
 target_include_directories(out PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/creatures.txt
+               ${CMAKE_CURRENT_BINARY_DIR}/creatures.txt COPYONLY)

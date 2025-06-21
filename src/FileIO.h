@@ -63,6 +63,8 @@ public:
 
     void indentedTree(void visit(const string &item, int level));
 
+    void visitNames(void visit(const string &name));
+
 private:
     std::string fileName;
     std::ifstream inFile;
@@ -318,6 +320,11 @@ inline int FileIO::nextPrime(int n)
 inline void FileIO::indentedTree(void visit(const string &item, int level)) 
 {
     bst.printTree(visit);
+}
+inline void FileIO::visitNames(void visit(const string &name)) {
+    for (Creature &c : this->hashTable->getAllCreatures()) {
+        visit(c.getName());
+    }
 };
 
 #endif // FILEIO_H

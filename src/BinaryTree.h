@@ -26,6 +26,7 @@ public:
         count = 0;
     }
     BinaryTree(const BinaryTree<KeyType> &) = delete; // disable COPY constructor!
+    BinaryTree &operator=(const BinaryTree<KeyType> &) = delete; // disable COPY assignment operator!
     virtual ~BinaryTree() { destroyTree(rootPtr); }
 
     // common functions for all binary trees
